@@ -50,7 +50,7 @@ async function loadSettings() {
         console.error('Error loading settings:', error);
         // Return defaults if settings file doesn't exist
         return {
-            localMode: true, // Default to local mode if config fails to load
+            localMode: false, // Default to local mode if config fails to load
             miniTestTimer: 120,
             readingTimer: 480,
             aiQuestionInterval: 30,
