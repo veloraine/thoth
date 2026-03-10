@@ -1,7 +1,7 @@
 {
-  "localMode": true,
+  "localMode": false,
   "miniTestTimer": 120,
-  "readingTimer": 480,
+  "readingTimer": 360,
   "aiQuestionInterval": 30,
   "popupQuizInterval": 20,
   "popupQuizCount": 10,
