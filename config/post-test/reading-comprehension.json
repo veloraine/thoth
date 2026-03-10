@@ -1,0 +1,112 @@
+[
+  {
+    "id": "rc1",
+    "question": "What company do the candidates work for?",
+    "type": "multiple-choice",
+    "options": [
+      "Becker-Birnbaum International (BBI)",
+      "FreshFace Corporation",
+      "Google",
+      "Setty Analytics Inc."
+    ]
+  },
+  {
+    "id": "rc2",
+    "question": "What did Molly Ashworth spearhead at BBI?",
+    "type": "multiple-choice",
+    "options": [
+      "A new product line for beauty products",
+      "A subscription service for cleaning products",
+      "A people-analytics system",
+      "A customer research program"
+    ]
+  },
+  {
+    "id": "rc3",
+    "question": "What was Ed Yu's key achievement at BBI?",
+    "type": "multiple-choice",
+    "options": [
+      "Launching a subscription service",
+      "Creating the people-analytics algorithm",
+      "Reviving the FreshFace product line with 60% sales increase",
+      "Building a cross-division network"
+    ]
+  },
+  {
+    "id": "rc4",
+    "question": "What match percentage did Molly receive from the algorithm?",
+    "type": "multiple-choice",
+    "options": [
+      "60%",
+      "83%",
+      "90%",
+      "96%"
+    ]
+  },
+  {
+    "id": "rc5",
+    "question": "How did Brad Bibson describe the algorithm?",
+    "type": "multiple-choice",
+    "options": [
+      "Proven and reliable with years of data",
+      "Brand-new, with only three prior promotion decisions",
+      "Based on external industry benchmarks",
+      "Fully transparent and well-understood"
+    ]
+  },
+  {
+    "id": "rc6",
+    "question": "Why does Christine want to give Ed the promotion, beyond the algorithm's recommendation?",
+    "type": "multiple-choice",
+    "options": [
+      "Ed has better interview skills",
+      "Ed is at risk of leaving BBI and there's no beauty division opening",
+      "Ed has more years of experience",
+      "Molly doesn't want the job"
+    ]
+  },
+  {
+    "id": "rc7",
+    "question": "How did Aliyah describe Molly's interview performance?",
+    "type": "multiple-choice",
+    "options": [
+      "Average but acceptable",
+      "Stiff and rigid",
+      "Knocked it out of the park",
+      "Good but lacking vision"
+    ]
+  },
+  {
+    "id": "rc8",
+    "question": "According to Prasad Setty, how should people analytics be used?",
+    "type": "multiple-choice",
+    "options": [
+      "As the sole basis for all HR decisions",
+      "Only for entry-level hiring",
+      "As a complement to, not substitute for, human judgment",
+      "To replace managers in the decision process"
+    ]
+  },
+  {
+    "id": "rc9",
+    "question": "What was the algorithm's analysis about Molly's flight risk?",
+    "type": "multiple-choice",
+    "options": [
+      "She was flagged as high risk of leaving",
+      "She was not flagged as a flight risk",
+      "She had already submitted her resignation",
+      "The algorithm didn't analyze flight risk"
+    ]
+  },
+  {
+    "id": "rc10",
+    "question": "What distinguished Ed's network according to the email and meeting analysis?",
+    "type": "multiple-choice",
+    "options": [
+      "He was connected mainly within the beauty division",
+      "He was connected to key people in other groups",
+      "He had fewer connections than Molly",
+      "He had no significant professional network"
+    ]
+  }
+]

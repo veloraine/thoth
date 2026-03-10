@@ -1,0 +1,11 @@
+{
+  "localMode": true,
+  "miniTestTimer": 120,
+  "readingTimer": 480,
+  "aiQuestionInterval": 30,
+  "popupQuizInterval": 45,
+  "popupQuizCount": 3,
+  "googleSheetId": "YOUR_GOOGLE_SHEET_ID_HERE",
+  "googleApiKey": "YOUR_GOOGLE_API_KEY_HERE"
+}
+

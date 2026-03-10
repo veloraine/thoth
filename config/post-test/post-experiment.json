@@ -1,0 +1,55 @@
+{
+  "demographics": [
+    {
+      "id": "age",
+      "question": "What is your age?",
+      "type": "number"
+    },
+    {
+      "id": "gender",
+      "question": "What is your gender?",
+      "type": "multiple-choice",
+      "options": [
+        "Male",
+        "Female",
+        "Non-binary",
+        "Prefer not to say",
+        "Other"
+      ]
+    },
+    {
+      "id": "year",
+      "question": "What year are you in university?",
+      "type": "multiple-choice",
+      "options": [
+        "First year (Freshman)",
+        "Second year (Sophomore)",
+        "Third year (Junior)",
+        "Fourth year (Senior)",
+        "Graduate student",
+        "Other"
+      ]
+    },
+    {
+      "id": "major",
+      "question": "What is your field of study/major?",
+      "type": "text"
+    },
+    {
+      "id": "english",
+      "question": "Is English your first language?",
+      "type": "multiple-choice",
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "id": "reading",
+      "question": "How would you rate your reading comprehension skills?",
+      "type": "likert",
+      "scale": 5,
+      "labels": ["Poor", "Excellent"]
+    }
+  ]
+}

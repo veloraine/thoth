@@ -1,0 +1,63 @@
+[
+  {
+    "id": "mt1",
+    "question": "What does the word 'ambiguous' mean?",
+    "type": "multiple-choice",
+    "options": [
+      "Very clear and obvious",
+      "Open to multiple interpretations",
+      "Extremely simple",
+      "Scientifically proven"
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "id": "mt2",
+    "question": "In academic writing, what is the primary purpose of a literature review?",
+    "type": "multiple-choice",
+    "options": [
+      "To summarize all books ever written on a topic",
+      "To show what research has already been done on a topic",
+      "To criticize other researchers' work",
+      "To fill pages in a paper"
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "id": "mt3",
+    "question": "Which of the following best describes 'critical thinking'?",
+    "type": "multiple-choice",
+    "options": [
+      "Finding faults in everything",
+      "Accepting information at face value",
+      "Analyzing and evaluating information objectively",
+      "Memorizing facts quickly"
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "id": "mt4",
+    "question": "What is the main difference between a hypothesis and a theory?",
+    "type": "multiple-choice",
+    "options": [
+      "There is no difference",
+      "A hypothesis is a testable prediction; a theory is well-supported by evidence",
+      "A theory is always wrong; a hypothesis is always right",
+      "Hypotheses are only used in mathematics"
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "id": "mt5",
+    "question": "When reading academic texts, what does it mean to 'synthesize' information?",
+    "type": "multiple-choice",
+    "options": [
+      "To copy information word-for-word",
+      "To combine ideas from multiple sources into a coherent understanding",
+      "To delete unnecessary information",
+      "To translate text into another language"
+    ],
+    "correctAnswer": 1
+  }
+]
+

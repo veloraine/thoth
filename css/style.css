@@ -1,0 +1,840 @@
+/**
+ * Custom Styles for Research Reading Website
+ * Complements Bootstrap 5 with academic theme
+ */
+
+/* === Global Styles === */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --text-color: #2c3e50;
+    --bg-color: #ecf0f1;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* === Card Styles === */
+.card {
+    border: none;
+    border-radius: 8px;
+}
+
+.card-title {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* === General Markdown Rendering Improvements === */
+#consent-content,
+#instruction-content,
+#scenario-content,
+#article-content {
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+#consent-content h1,
+#instruction-content h1,
+#scenario-content h1 {
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+#consent-content h2,
+#instruction-content h2,
+#scenario-content h2 {
+    font-weight: 600;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+#consent-content ul,
+#instruction-content ul,
+#scenario-content ul,
+#consent-content ol,
+#instruction-content ol,
+#scenario-content ol {
+    margin-bottom: 1rem;
+}
+
+#consent-content li,
+#instruction-content li,
+#scenario-content li {
+    margin-bottom: 0.4rem;
+}
+
+#consent-content hr,
+#instruction-content hr,
+#scenario-content hr,
+#article-content hr {
+    margin: 2rem 0;
+    border: 0;
+    border-top: 2px solid #e9ecef;
+}
+
+/* === Consent Page === */
+.consent-text {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.consent-text h1 {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.consent-text h2 {
+    font-size: 1.25rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.consent-text p {
+    margin-bottom: 1rem;
+}
+
+.consent-text ul, .consent-text ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.consent-text strong {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* === Instruction Pages === */
+.instruction-text,
+.scenario-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.instruction-text h1,
+.scenario-text h1 {
+    font-size: 1.75rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.instruction-text h2,
+.scenario-text h2 {
+    font-size: 1.4rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.instruction-text h3,
+.scenario-text h3 {
+    font-size: 1.15rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.instruction-text h4,
+.scenario-text h4 {
+    font-size: 1.05rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.instruction-text p,
+.scenario-text p {
+    margin-bottom: 1rem;
+}
+
+.instruction-text ul,
+.instruction-text ol,
+.scenario-text ul,
+.scenario-text ol {
+    margin-bottom: 1rem;
+    padding-left: 1.75rem;
+}
+
+.instruction-text code,
+.scenario-text code {
+    background-color: #f4f4f4;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.instruction-text pre,
+.scenario-text pre {
+    background-color: #f4f4f4;
+    padding: 1rem;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.instruction-text pre code,
+.scenario-text pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+.instruction-text strong,
+.scenario-text strong {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* === Article Reading Styles === */
+.article-text {
+    font-family: 'Charter', 'Georgia', 'Cambria', 'Times New Roman', serif;
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #1a1a1a;
+    text-align: left;
+    max-width: 100%;
+}
+
+.article-text h1 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1.3;
+    text-align: center;
+}
+
+.article-text h2 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 1.6rem;
+    margin-top: 2rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    line-height: 1.3;
+}
+
+.article-text h3 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 1.3rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.article-text p {
+    margin-bottom: 1.25rem;
+    font-weight: 400;
+}
+
+.article-text ul,
+.article-text ol {
+    margin-bottom: 1.25rem;
+    padding-left: 2rem;
+    line-height: 1.8;
+}
+
+.article-text li {
+    margin-bottom: 0.5rem;
+}
+
+.article-text blockquote {
+    border-left: 4px solid var(--secondary-color);
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #555;
+}
+
+.article-text strong {
+    font-weight: 600;
+    color: #000;
+}
+
+.article-text em {
+    font-style: italic;
+}
+
+/* === Timer Badge === */
+#timer-display {
+    font-size: 1.2rem;
+    padding: 0.6rem 1rem;
+    animation: pulse 1s infinite;
+}
+
+#reading-timer-display {
+    font-size: 1.2rem;
+    padding: 0.6rem 1rem;
+    white-space: nowrap;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* === Question Styles === */
+.form-check-input {
+    margin-top: 0.25rem;
+    cursor: pointer;
+}
+
+.form-check-label {
+    cursor: pointer;
+}
+
+/* Removed hover effect - was annoying on consent form */
+
+/* === Likert Scale Styles === */
+.likert-scale {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.likert-scale .form-check {
+    text-align: center;
+}
+
+.likert-scale .form-check-input {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.likert-scale .form-check-label {
+    display: block;
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+
+/* === Progress Bar === */
+.progress {
+    background-color: #e9ecef;
+}
+
+.progress-bar {
+    background-color: var(--secondary-color);
+    transition: width 0.6s ease;
+}
+
+/* === Buttons === */
+.btn-primary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.btn-primary:disabled {
+    background-color: #95a5a6;
+    border-color: #95a5a6;
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.btn-success:hover {
+    background-color: #229954;
+    border-color: #229954;
+}
+
+.btn-lg {
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+}
+
+/* === Modal Styles === */
+.modal-header {
+    border-bottom: 2px solid #dee2e6;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    border-top: 2px solid #dee2e6;
+}
+
+#quizModal .modal-header {
+    background-color: var(--warning-color);
+}
+
+/* === AI Assistant Sidebar === */
+.ai-sidebar {
+    position: fixed;
+    right: -400px;
+    top: 0;
+    width: 400px;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+    z-index: 1050;
+    transition: right 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-sidebar.open {
+    right: 0;
+}
+
+.ai-sidebar-header {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-bottom: 1px solid #e9ecef;
+    position: relative;
+}
+
+.ai-sidebar-header h5 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--primary-color);
+}
+
+.ai-sidebar-header .btn-close {
+    position: absolute;
+    right: 1.5rem;
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+.ai-sidebar-header .btn-close:hover {
+    opacity: 1;
+}
+
+.ai-sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* === Current AI Interaction Display === */
+#current-ai-interaction {
+    margin-bottom: 1.5rem;
+}
+
+#current-ai-interaction:empty {
+    margin-bottom: 0;
+}
+
+.ai-current-question {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.ai-current-question h6 {
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.ai-current-question p {
+    margin: 0;
+    color: #495057;
+}
+
+/* === AI Question Buttons === */
+.ai-question-btn {
+    width: 100%;
+    text-align: left;
+    padding: 0.875rem 1rem;
+    margin-bottom: 0.75rem;
+    background-color: #ffffff;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.ai-question-btn:hover {
+    border-color: var(--secondary-color);
+    background-color: #f8f9fa;
+    transform: translateX(4px);
+}
+
+.ai-question-btn:active {
+    transform: translateX(2px);
+}
+
+/* === Current AI Interaction Display === */
+#current-ai-interaction {
+    margin-bottom: 1.5rem;
+}
+
+.ai-current-question {
+    background-color: #e3f2fd;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.ai-current-question h6 {
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ai-current-question p {
+    margin: 0;
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+/* === AI Thinking Animation === */
+.ai-thinking {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border-left: 4px solid #6c757d;
+    text-align: center;
+}
+
+.thinking-dots {
+    font-size: 1.1rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.thinking-dots .dot {
+    animation: blink 1.4s infinite;
+    opacity: 0;
+}
+
+.thinking-dots .dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.thinking-dots .dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.thinking-dots .dot:nth-child(4) {
+    animation-delay: 0.6s;
+}
+
+@keyframes blink {
+    0%, 20% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* === AI Answer Display === */
+.ai-answer-display {
+    background-color: #d4edda;
+    border-radius: 8px;
+    padding: 1rem;
+    border-left: 4px solid #28a745;
+}
+
+.ai-answer-display h6 {
+    color: #155724;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.ai-answer-display p {
+    margin: 0;
+    color: #155724;
+    line-height: 1.6;
+}
+
+/* === Quick Actions === */
+#ai-quick-actions h6 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.ai-quick-btn {
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    background-color: #fff3cd;
+    border: 2px solid #ffc107;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.ai-quick-btn:hover {
+    background-color: #ffe69c;
+    border-color: #ffb300;
+}
+
+/* === Floating AI Button === */
+.ai-toggle-btn {
+    position: fixed !important;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    animation: pulse-ai 2s infinite;
+}
+
+.ai-toggle-btn span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes pulse-ai {
+    0%, 100% {
+        box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(52, 152, 219, 0.6);
+    }
+}
+
+/* === Sidebar Backdrop === */
+.ai-sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+    display: none;
+}
+
+.ai-sidebar-backdrop.show {
+    display: block;
+}
+
+/* === Badge Styles === */
+.badge {
+    padding: 0.5rem 0.8rem;
+    font-weight: 500;
+}
+
+/* === Alert Styles === */
+.alert {
+    border-radius: 6px;
+    border: none;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* === Responsive Adjustments === */
+@media (max-width: 768px) {
+    .article-text {
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+    
+    .consent-text {
+        font-size: 0.95rem;
+    }
+    
+    .instruction-text,
+    .scenario-text {
+        font-size: 1rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .btn-lg {
+        padding: 0.6rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .likert-scale .form-check {
+        margin-bottom: 0.5rem;
+    }
+    
+    .article-text h1 {
+        font-size: 1.75rem;
+    }
+    
+    .article-text h2 {
+        font-size: 1.4rem;
+    }
+    
+    .article-text h3 {
+        font-size: 1.15rem;
+    }
+    
+    /* AI Sidebar - full width on mobile */
+    .ai-sidebar {
+        width: 100%;
+        right: -100%;
+    }
+    
+    #ai-assistant-toggle {
+        right: 15px;
+        width: 50px;
+        height: 50px;
+    }
+    
+    #ai-assistant-toggle span {
+        font-size: 1.25rem;
+    }
+}
+
+/* === Loading Spinner === */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.15em;
+    margin-right: 0.5rem;
+}
+
+/* === Accessibility === */
+.form-check-input:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+}
+
+button:focus,
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+}
+
+/* === Paragraph Highlighting === */
+.article-text p[data-paragraph] {
+    transition: background-color 0.4s ease, border-left-color 0.4s ease;
+    padding: 0.5rem 0.75rem;
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+    border-radius: 4px;
+    border-left: 4px solid transparent;
+}
+
+.article-text p.paragraph-highlight {
+    background-color: rgba(255, 213, 79, 0.25);
+    border-left-color: #ffd54f;
+}
+
+.article-text p.paragraph-highlight-flash {
+    background-color: rgba(255, 213, 79, 0.5);
+    border-left-color: #ffb300;
+}
+
+/* === AI Paragraph Reference Link === */
+.ai-paragraph-ref {
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(21, 87, 36, 0.2);
+}
+
+.paragraph-ref-link {
+    color: #155724;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.paragraph-ref-link:hover {
+    color: #0d3d17;
+    text-decoration: underline;
+}
+
+/* === Print Styles === */
+@media print {
+    .btn, .progress, .badge {
+        display: none;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+    }
+}
+

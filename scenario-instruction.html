@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Instructions - Research Study</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Progress Indicator -->
+                <div class="progress mb-4" style="height: 8px;">
+                    <div class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+
+                <!-- Scenario Instructions Card -->
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h1 class="card-title text-center mb-4" id="scenario-title">Reading Instructions</h1>
+                        
+                        <div class="alert alert-primary mb-4">
+                            <strong>Your Scenario:</strong> <span id="scenario-number">-</span>
+                        </div>
+
+                        <!-- Scenario content will be loaded here -->
+                        <div id="scenario-content" class="scenario-text mb-4">
+                            <p class="text-center text-muted">Loading instructions...</p>
+                        </div>
+
+                        <!-- Continue Button -->
+                        <div class="text-center">
+                            <button id="start-reading-btn" class="btn btn-success btn-lg">
+                                Start Reading
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/config.js"></script>
+    <script src="js/storage.js"></script>
+    
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check session
+            const session = getSession();
+            if (!session || !session.userId || !session.scenario) {
+                alert('No active session found. Please start from the beginning.');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Display scenario number
+            document.getElementById('scenario-number').textContent = `Scenario ${session.scenario}`;
+            
+            // Load scenario instructions from markdown file
+            try {
+                const scenarioFile = `scenario/scenario-${session.scenario}.md`;
+                const instructionText = await loadConfig(scenarioFile);
+                
+                // Parse markdown and render
+                const htmlContent = marked.parse(instructionText);
+                document.getElementById('scenario-content').innerHTML = htmlContent;
+                
+                // Extract title from the first h1 (if exists)
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlContent;
+                const h1 = tempDiv.querySelector('h1');
+                if (h1) {
+                    document.getElementById('scenario-title').textContent = h1.textContent;
+                    // Remove the h1 from the content since we show it separately
+                    h1.remove();
+                    document.getElementById('scenario-content').innerHTML = tempDiv.innerHTML;
+                }
+                
+            } catch (error) {
+                console.error('Error loading scenario instructions:', error);
+                document.getElementById('scenario-content').innerHTML = '<p class="text-danger">Error loading instructions. Please refresh the page.</p>';
+            }
+            
+            // Handle start button
+            document.getElementById('start-reading-btn').addEventListener('click', function() {
+                window.location.href = 'reading.html';
+            });
+        });
+    </script>
+</body>
+</html>
+

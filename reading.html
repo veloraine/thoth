@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Article - Research Study</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <!-- Progress Indicator -->
+                <div class="progress mb-4" style="height: 8px;">
+                    <div class="progress-bar" role="progressbar" style="width: 44%;" aria-valuenow="44" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+
+                <!-- AI Assistant Button (floating, only visible in scenarios 2 & 4) -->
+                <button id="ai-assistant-toggle" class="btn btn-primary btn-lg ai-toggle-btn" style="display: none;">
+                    <span style="font-size: 1.5rem; line-height: 1;">•••</span>
+                </button>
+
+                <!-- Reading Card -->
+                <div class="card shadow-sm">
+                    <div class="card-body p-5">
+                        <!-- Header with Timer -->
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div class="flex-grow-1">
+                                <!-- Article title will be here from markdown -->
+                            </div>
+                            <span class="badge bg-warning text-dark fs-5" id="reading-timer-display" style="white-space: nowrap;">
+                                <span id="reading-timer">8:00</span>
+                            </span>
+                        </div>
+                        
+                        <!-- Article content will be loaded here (including title from markdown) -->
+                        <article id="article-content" class="article-text">
+                            <p class="text-center text-muted">Loading article...</p>
+                        </article>
+
+                        <!-- Finish Button -->
+                        <div class="text-center mt-5">
+                            <button id="finish-reading-btn" class="btn btn-primary btn-lg">
+                                Finish Reading
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Assistant Sidebar -->
+            <div id="ai-sidebar" class="ai-sidebar">
+                <div class="ai-sidebar-header">
+                    <h5>AI Reading Assistant</h5>
+                    <button id="close-sidebar" class="btn-close" aria-label="Close"></button>
+                </div>
+                <div class="ai-sidebar-content">
+                    <div id="current-ai-interaction">
+                        <!-- Current AI interaction display -->
+                    </div>
+                    
+                    <div id="ai-questions-section" class="mb-4">
+                        <h6 class="mb-3 text-muted">Ask the AI</h6>
+                        <div id="ai-questions-list">
+                            <!-- AI question buttons will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <hr class="my-3">
+                    
+                    <div id="ai-quick-actions">
+                        <h6 class="mb-3 text-muted">Quick Actions</h6>
+                        <!-- Quick action buttons -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pop-up Quiz Modal -->
+    <div class="modal fade" id="quizModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title">
+                        <i class="bi bi-question-circle"></i> Quick Comprehension Check
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <p class="fw-bold" id="quiz-question"></p>
+                    <div id="quiz-options"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="quiz-submit-btn">Submit Answer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/config.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/scenarios.js"></script>
+    
+    <script>
+        let readingStartTime;
+        let quizModal;
+        let readingTimerInterval;
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check session
+            const session = getSession();
+            if (!session || !session.userId || !session.scenario) {
+                alert('No active session found. Please start from the beginning.');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Initialize quiz modal
+            quizModal = new bootstrap.Modal(document.getElementById('quizModal'));
+            
+            // Record reading start time or get existing
+            const existingSession = getSession();
+            if (existingSession.readingStartTime) {
+                // Page was refreshed - calculate remaining time
+                readingStartTime = existingSession.readingStartTime;
+                const elapsed = Math.floor((new Date() - new Date(readingStartTime)) / 1000);
+                const remaining = Math.max(0, 480 - elapsed);
+                startReadingTimer(remaining);
+            } else {
+                // First time on this page
+                readingStartTime = new Date().toISOString();
+                updateSession({ readingStartTime: readingStartTime });
+                startReadingTimer(480); // 8 minutes = 480 seconds
+            }
+            
+            // Load article
+            try {
+                const articleText = await loadConfig('reading/article.md');
+                document.getElementById('article-content').innerHTML = marked.parse(articleText);
+                
+                // Tag numbered paragraphs with IDs for AI highlighting
+                document.querySelectorAll('#article-content p').forEach(function(p) {
+                    const match = p.textContent.match(/^\((\d+)\)/);
+                    if (match) {
+                        p.id = 'paragraph-' + match[1];
+                        p.dataset.paragraph = match[1];
+                    }
+                });
+                
+                // Start scenario-specific interruptions
+                await initScenario(session.scenario);
+                
+            } catch (error) {
+                console.error('Error loading article:', error);
+                document.getElementById('article-content').innerHTML = '<p class="text-danger">Error loading article. Please refresh the page.</p>';
+            }
+            
+            // Handle finish button
+            document.getElementById('finish-reading-btn').addEventListener('click', function() {
+                finishReading();
+            });
+        });
+        
+        function startReadingTimer(seconds) {
+            let remainingSeconds = seconds;
+            
+            // Update display immediately
+            updateReadingTimerDisplay(remainingSeconds);
+            
+            // Start countdown
+            readingTimerInterval = setInterval(function() {
+                remainingSeconds--;
+                
+                // Check if time's up
+                if (remainingSeconds <= 0) {
+                    clearInterval(readingTimerInterval);
+                    
+                    // Ensure display shows 0:00
+                    updateReadingTimerDisplay(0);
+                    
+                    // Change badge color to danger when time's up
+                    const badge = document.getElementById('reading-timer-display');
+                    if (badge) {
+                        badge.classList.remove('bg-warning');
+                        badge.classList.add('bg-danger', 'text-white');
+                    }
+                    
+                    // Auto-advance to next page
+                    setTimeout(function() {
+                        finishReading();
+                    }, 1000); // Wait 1 second so user can see 0:00
+                    return;
+                }
+                
+                // Update display
+                updateReadingTimerDisplay(remainingSeconds);
+                
+                // Change to red when under 30 seconds
+                if (remainingSeconds <= 30) {
+                    const badge = document.getElementById('reading-timer-display');
+                    if (badge) {
+                        badge.classList.remove('bg-warning');
+                        badge.classList.add('bg-danger', 'text-white');
+                    }
+                }
+            }, 1000);
+        }
+        
+        function updateReadingTimerDisplay(seconds) {
+            const safeSeconds = Math.max(0, seconds);
+            const minutes = Math.floor(safeSeconds / 60);
+            const secs = safeSeconds % 60;
+            
+            const display = `${minutes}:${secs.toString().padStart(2, '0')}`;
+            
+            const timerElement = document.getElementById('reading-timer');
+            if (timerElement) {
+                timerElement.textContent = display;
+            }
+        }
+        
+        function finishReading() {
+            // Stop timer
+            if (readingTimerInterval) {
+                clearInterval(readingTimerInterval);
+            }
+            
+            // Stop all scenario interruptions
+            stopScenario();
+            
+            // Record end time
+            const readingEndTime = new Date().toISOString();
+            const duration = Math.round((new Date(readingEndTime) - new Date(readingStartTime)) / 1000);
+            
+            updateSession({
+                readingEndTime: readingEndTime,
+                readingDuration: duration
+            });
+            
+            // Navigate to manipulation check
+            window.location.href = 'manipulation-check.html';
+        }
+    </script>
+</body>
+</html>
+

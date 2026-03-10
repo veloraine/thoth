@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Test - Research Study</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Progress Indicator -->
+                <div class="progress mb-4" style="height: 8px;">
+                    <div class="progress-bar" role="progressbar" style="width: 22%;" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+
+                <!-- Mini Test Card -->
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <!-- Header with Timer -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h1 class="card-title mb-0">Mini Reading Test</h1>
+                            <span class="badge bg-warning text-dark fs-5" id="timer-display">
+                                <i class="bi bi-clock"></i> <span id="timer">2:00</span>
+                            </span>
+                        </div>
+                        
+                        <div class="alert alert-info mb-4">
+                            <strong>Instructions:</strong> Answer the following reading comprehension questions. You have <strong id="timer-minutes">2</strong> minutes to complete this test.
+                        </div>
+
+                        <!-- Questions Container -->
+                        <form id="mini-test-form">
+                            <div id="questions-container">
+                                <p class="text-center text-muted">Loading questions...</p>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">
+                                    Submit Answers
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/config.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/timer.js"></script>
+    
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check session
+            const session = getSession();
+            if (!session || !session.userId) {
+                alert('No active session found. Please start from the beginning.');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Load settings and questions
+            try {
+                const settings = await loadConfig('general/settings.json');
+                const questions = await loadConfig('pre-test/mini-test-questions.json');
+                
+                // Update timer display
+                const timerMinutes = Math.floor(settings.miniTestTimer / 60);
+                document.getElementById('timer-minutes').textContent = timerMinutes;
+                
+                // Render questions
+                renderQuestions(questions);
+                
+                // Start timer
+                startTimer(settings.miniTestTimer, function() {
+                    // Auto-submit when time's up
+                    submitTest();
+                });
+                
+            } catch (error) {
+                console.error('Error loading test:', error);
+                document.getElementById('questions-container').innerHTML = '<p class="text-danger">Error loading test. Please refresh the page.</p>';
+            }
+            
+            // Handle form submission
+            document.getElementById('mini-test-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitTest();
+            });
+        });
+        
+        function renderQuestions(questions) {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'mb-4 p-3 border rounded';
+                
+                let html = `
+                    <h5 class="mb-3">Question ${index + 1}</h5>
+                    <p class="fw-bold">${q.question}</p>
+                `;
+                
+                if (q.type === 'multiple-choice') {
+                    q.options.forEach((option, optIndex) => {
+                        html += `
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="q${q.id}" id="q${q.id}_${optIndex}" value="${optIndex}" required>
+                                <label class="form-check-label" for="q${q.id}_${optIndex}">
+                                    ${option}
+                                </label>
+                            </div>
+                        `;
+                    });
+                }
+                
+                questionDiv.innerHTML = html;
+                container.appendChild(questionDiv);
+            });
+        }
+        
+        function submitTest() {
+            // Stop timer
+            stopTimer();
+            
+            // Collect answers
+            const form = document.getElementById('mini-test-form');
+            const formData = new FormData(form);
+            const answers = {};
+            
+            for (let [key, value] of formData.entries()) {
+                answers[key] = parseInt(value);
+            }
+            
+            // Save to session
+            updateSession({
+                miniTestAnswers: answers,
+                miniTestEndTime: new Date().toISOString()
+            });
+            
+            // Navigate to scenario instruction
+            window.location.href = 'scenario-instruction.html';
+        }
+    </script>
+</body>
+</html>
+

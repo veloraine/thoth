@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Experiment Questionnaire - Research Study</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Progress Indicator -->
+                <div class="progress mb-4" style="height: 8px;">
+                    <div class="progress-bar" role="progressbar" style="width: 88%;" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+
+                <!-- Post-Experiment Card -->
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h1 class="card-title text-center mb-4">Post-Experiment Questionnaire (4/4)</h1>
+                        <h3 class="text-center text-muted mb-4">Demographics</h3>
+                        
+                        <div class="alert alert-info mb-4">
+                            Finally, please answer some questions about your background.
+                        </div>
+
+                        <!-- Questions Form -->
+                        <form id="post-experiment-form">
+                            <!-- Demographics Section -->
+                            <div class="mb-5">
+                                <h4 class="border-bottom pb-2 mb-3">Demographics</h4>
+                                <div id="demographics-container">
+                                    <p class="text-center text-muted">Loading questions...</p>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-success btn-lg" id="submit-btn">
+                                    <span class="spinner-border spinner-border-sm d-none" id="spinner"></span>
+                                    Submit All Data
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Success Message -->
+                        <div class="alert alert-success mt-4 d-none" id="success-message">
+                            <h4 class="alert-heading">Thank you!</h4>
+                            <p>Your responses have been successfully submitted. You may now close this window.</p>
+                        </div>
+
+                        <!-- Error Message -->
+                        <div class="alert alert-danger mt-4 d-none" id="error-message">
+                            <h4 class="alert-heading">Submission Error</h4>
+                            <p id="error-text"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/config.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/sheets-api.js"></script>
+    
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check session
+            const session = getSession();
+            if (!session || !session.userId) {
+                alert('No active session found. Please start from the beginning.');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Load questions
+            try {
+                const questions = await loadConfig('post-test/post-experiment.json');
+                
+                if (questions.demographics) {
+                    renderQuestions(questions.demographics, 'demographics-container', 'demo');
+                }
+            } catch (error) {
+                console.error('Error loading questions:', error);
+                document.getElementById('mmi-container').innerHTML = '<p class="text-danger">Error loading questions. Please refresh the page.</p>';
+            }
+            
+            // Handle form submission
+            document.getElementById('post-experiment-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                await submitAllData();
+            });
+        });
+        
+        function renderQuestions(questions, containerId, prefix) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'mb-4 p-3 border rounded';
+                
+                let html = `<p class="fw-bold">${q.question}</p>`;
+                
+                if (q.type === 'multiple-choice') {
+                    q.options.forEach((option, optIndex) => {
+                        html += `
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="${prefix}_${q.id}" id="${prefix}_${q.id}_${optIndex}" value="${optIndex}" required>
+                                <label class="form-check-label" for="${prefix}_${q.id}_${optIndex}">
+                                    ${option}
+                                </label>
+                            </div>
+                        `;
+                    });
+                } else if (q.type === 'likert') {
+                    const scale = q.scale || 5;
+                    html += '<div class="likert-scale">';
+                    if (q.labels && q.labels.length === 2) {
+                        html += `<div class="d-flex justify-content-between mb-2"><small>${q.labels[0]}</small><small>${q.labels[1]}</small></div>`;
+                    }
+                    html += '<div class="d-flex justify-content-between align-items-center">';
+                    for (let i = 1; i <= scale; i++) {
+                        html += `
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="${prefix}_${q.id}" id="${prefix}_${q.id}_${i}" value="${i}" required>
+                                <label class="form-check-label" for="${prefix}_${q.id}_${i}">${i}</label>
+                            </div>
+                        `;
+                    }
+                    html += '</div></div>';
+                } else if (q.type === 'number') {
+                    html += `<input type="number" class="form-control" name="${prefix}_${q.id}" required>`;
+                } else if (q.type === 'text') {
+                    html += `<input type="text" class="form-control" name="${prefix}_${q.id}" required>`;
+                }
+                
+                questionDiv.innerHTML = html;
+                container.appendChild(questionDiv);
+            });
+        }
+        
+        async function submitAllData() {
+            const submitBtn = document.getElementById('submit-btn');
+            const spinner = document.getElementById('spinner');
+            
+            // Disable button and show spinner
+            submitBtn.disabled = true;
+            spinner.classList.remove('d-none');
+            
+            // Collect form data
+            const form = document.getElementById('post-experiment-form');
+            const formData = new FormData(form);
+            const postExpAnswers = {};
+            
+            for (let [key, value] of formData.entries()) {
+                postExpAnswers[key] = value;
+            }
+            
+            updateSession({ postExperimentAnswers: postExpAnswers });
+            
+            // Get complete session data
+            const session = getSession();
+            
+            try {
+                // Submit to Google Sheets (or local mode)
+                const result = await submitToGoogleSheets(session);
+                
+                if (result && result.localMode) {
+                    console.log('Local mode: Data stored for CSV export');
+                }
+                
+                // Redirect to thank you page
+                // Note: Session will be available on thank you page for displaying user ID
+                window.location.href = 'thank-you.html';
+                
+            } catch (error) {
+                console.error('Submission error:', error);
+                
+                // In local mode, this shouldn't happen, but if it does, still proceed
+                console.log('Error caught, but proceeding to thank you page (local mode fallback)');
+                window.location.href = 'thank-you.html';
+            }
+        }
+    </script>
+</body>
+</html>
+

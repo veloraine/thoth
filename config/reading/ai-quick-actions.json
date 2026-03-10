@@ -1,0 +1,12 @@
+[
+  {
+    "id": "summarize",
+    "label": "📝 Summarize this case study",
+    "response": "This case study presents a promotion dilemma at Becker-Birnbaum International (BBI). VP Aliyah Jones must choose between Molly Ashworth (her mentee with proven results in cleaning products) and Ed Yu (recommended by HR's new people-analytics algorithm with a 96% match score). Despite Molly's stronger interview performance and Aliyah's confidence in her, the algorithm and HR favor Ed. Expert Prasad Setty advises that analytics should complement, not replace, human judgment — and Aliyah should own the final decision."
+  },
+  {
+    "id": "explain",
+    "label": "🔍 Explain the algorithm's role",
+    "response": "HR's new people-analytics system rated candidates for the marketing director role. Ed Yu scored a 96% match while Molly Ashworth scored 83%. Data scientist Brad Bibson also provided network analyses of their email and meeting histories, showing Ed had broader connections across groups. However, the algorithm is brand-new with only three prior promotion decisions, and its methodology isn't transparent to Aliyah. The case raises important questions about trusting data-driven tools versus personal judgment and experience."
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "id": "sr1",
+    "question": "How focused were you while reading the article?",
+    "type": "likert",
+    "scale": 7,
+    "labels": ["Not focused at all", "Extremely focused"]
+  },
+  {
+    "id": "sr2",
+    "question": "How difficult did you find the article to understand?",
+    "type": "likert",
+    "scale": 7,
+    "labels": ["Very easy", "Very difficult"]
+  },
+  {
+    "id": "sr3",
+    "question": "How much effort did you put into reading and understanding the article?",
+    "type": "likert",
+    "scale": 7,
+    "labels": ["No effort at all", "Maximum effort"]
+  },
+  {
+    "id": "sr4",
+    "question": "How confident are you that you understood the main ideas of the article?",
+    "type": "likert",
+    "scale": 7,
+    "labels": ["Not confident at all", "Very confident"]
+  },
+  {
+    "id": "sr5",
+    "question": "How interested were you in the topic of the article?",
+    "type": "likert",
+    "scale": 7,
+    "labels": ["Not interested at all", "Very interested"]
+  },
+  {
+    "id": "sr6",
+    "question": "Did you experience any technical difficulties during the study?",
+    "type": "multiple-choice",
+    "options": [
+      "No difficulties",
+      "Minor difficulties (did not significantly affect completion)",
+      "Moderate difficulties (somewhat affected completion)",
+      "Major difficulties (significantly affected completion)"
+    ]
+  }
+]
+

@@ -1,0 +1,64 @@
+/**
+ * Configuration Loader
+ * Loads configuration files (JSON and Markdown) from the config directory
+ */
+
+async function loadConfig(path) {
+    try {
+        const response = await fetch(`config/${path}`);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to load config: ${path}`);
+        }
+        
+        // If it's a markdown file, return as text
+        if (path.endsWith('.md')) {
+            return await response.text();
+        }
+        
+        // If it's a JSON file, parse and return
+        if (path.endsWith('.json')) {
+            return await response.json();
+        }
+        
+        return await response.text();
+    } catch (error) {
+        console.error(`Error loading config file: ${path}`, error);
+        throw error;
+    }
+}
+
+/**
+ * Load settings with defaults
+ */
+async function loadSettings() {
+    try {
+        const settings = await loadConfig('general/settings.json');
+        
+        // Provide default values if not specified
+        return {
+            localMode: settings.localMode !== undefined ? settings.localMode : false,
+            miniTestTimer: settings.miniTestTimer || 120,
+            readingTimer: settings.readingTimer || 480,
+            aiQuestionInterval: settings.aiQuestionInterval || 30,
+            popupQuizInterval: settings.popupQuizInterval || 45,
+            popupQuizCount: settings.popupQuizCount || 3,
+            googleSheetId: settings.googleSheetId || '',
+            googleApiKey: settings.googleApiKey || ''
+        };
+    } catch (error) {
+        console.error('Error loading settings:', error);
+        // Return defaults if settings file doesn't exist
+        return {
+            localMode: true, // Default to local mode if config fails to load
+            miniTestTimer: 120,
+            readingTimer: 480,
+            aiQuestionInterval: 30,
+            popupQuizInterval: 45,
+            popupQuizCount: 3,
+            googleSheetId: '',
+            googleApiKey: ''
+        };
+    }
+}
+
