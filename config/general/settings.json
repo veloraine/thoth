@@ -1,11 +1,10 @@
 {
-  "localMode": true,
+  "localMode": false,
   "miniTestTimer": 120,
-  "readingTimer": 480,
+  "readingTimer": 15,
   "aiQuestionInterval": 30,
-  "popupQuizInterval": 45,
-  "popupQuizCount": 3,
-  "googleSheetId": "YOUR_GOOGLE_SHEET_ID_HERE",
-  "googleApiKey": "YOUR_GOOGLE_API_KEY_HERE"
+  "popupQuizInterval": 20,
+  "popupQuizCount": 10,
+  "supabaseUrl": "",
+  "supabaseAnonKey": ""
 }
-

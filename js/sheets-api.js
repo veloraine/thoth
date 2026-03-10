@@ -1,91 +1,86 @@
 /**
- * Google Sheets API Integration
- * Submits participant data to Google Sheets or exports to CSV in local mode
+ * Data Submission
+ * Submits participant data to Supabase or exports to CSV in local mode
  */
 
 /**
- * Submit data to Google Sheets or export to CSV (local mode)
+ * Submit data to Supabase or fall back to local/CSV mode
  */
 async function submitToGoogleSheets(sessionData) {
-    // Export and format session data first
     const data = exportSessionData();
     
     if (!data) {
         console.error('No session data found to submit');
-        // In case of error, still proceed in local mode
         return { localMode: true, error: 'No session data' };
     }
     
     try {
-        // Load settings to get API credentials and local mode status
         const settings = await loadSettings();
         
-        // Check if in local mode
         if (settings.localMode === true) {
-            console.log('Local mode enabled - skipping Google Sheets submission');
-            // Store data for CSV export
+            console.log('Local mode enabled - skipping remote submission');
             window._localSubmissionData = data;
             return { localMode: true, data: data, success: true };
         }
         
-        // Production mode - submit to Google Sheets
-        if (!settings.googleApiKey || !settings.googleSheetId) {
-            console.warn('Google Sheets API credentials not configured. Treating as local mode.');
-            window._localSubmissionData = data;
-            return { localMode: true, data: data, success: true };
+        // Submit to Supabase if configured
+        if (settings.supabaseUrl && settings.supabaseAnonKey) {
+            return await submitToSupabase(data, settings);
         }
         
-        // Prepare row data for Google Sheets
-        const values = [[
-            data.userId,
-            data.scenario,
-            data.consentTime,
-            data.miniTestAnswers,
-            data.readingStartTime,
-            data.readingEndTime,
-            data.readingDuration,
-            data.interactionCount,
-            data.interactions,
-            data.manipulationCheckAnswers,
-            data.selfReportAnswers,
-            data.readingComprehensionAnswers,
-            data.postExperimentAnswers,
-            data.submitTime
-        ]];
-        
-        // Construct Google Sheets API URL
-        const range = 'Sheet1!A:N'; // Adjust range as needed
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${settings.googleSheetId}/values/${range}:append?valueInputOption=USER_ENTERED&key=${settings.googleApiKey}`;
-        
-        // Make API request
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                values: values
-            })
-        });
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error('Google Sheets API Error:', errorData);
-            throw new Error(`Failed to submit data: ${errorData.error?.message || response.statusText}`);
-        }
-        
-        const result = await response.json();
-        console.log('Data submitted successfully:', result);
-        
-        return result;
+        console.warn('No remote backend configured. Falling back to local mode.');
+        window._localSubmissionData = data;
+        return { localMode: true, data: data, success: true };
         
     } catch (error) {
-        console.error('Error submitting to Google Sheets:', error);
+        console.error('Error submitting data:', error);
         console.log('Falling back to local mode due to error');
-        // Store data locally as fallback
         window._localSubmissionData = data;
         return { localMode: true, data: data, success: true, fallback: true };
     }
+}
+
+/**
+ * Submit data to Supabase via PostgREST API
+ */
+async function submitToSupabase(data, settings) {
+    const row = {
+        user_id: data.userId,
+        scenario: data.scenario,
+        consent_time: data.consentTime,
+        mini_test_answers: data.miniTestAnswers,
+        reading_start_time: data.readingStartTime,
+        reading_end_time: data.readingEndTime,
+        reading_duration: data.readingDuration,
+        interaction_count: data.interactionCount,
+        interactions: data.interactions,
+        manipulation_check_answers: data.manipulationCheckAnswers,
+        self_report_answers: data.selfReportAnswers,
+        reading_comprehension_answers: data.readingComprehensionAnswers,
+        post_experiment_answers: data.postExperimentAnswers,
+        submit_time: data.submitTime
+    };
+    
+    const response = await fetch(`${settings.supabaseUrl}/rest/v1/responses`, {
+        method: 'POST',
+        headers: {
+            'apikey': settings.supabaseAnonKey,
+            'Authorization': `Bearer ${settings.supabaseAnonKey}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(row)
+    });
+    
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Supabase API Error:', errorText);
+        throw new Error(`Supabase submission failed: ${response.status} ${errorText}`);
+    }
+    
+    console.log('Data submitted to Supabase successfully');
+    window._localSubmissionData = data;
+    return { success: true, data: data };
 }
 
 /**
@@ -99,7 +94,6 @@ function exportToCSV() {
         return;
     }
     
-    // CSV headers
     const headers = [
         'User ID',
         'Scenario',
@@ -117,7 +111,6 @@ function exportToCSV() {
         'Submit Time'
     ];
     
-    // CSV row
     const row = [
         data.userId,
         data.scenario,
@@ -135,7 +128,6 @@ function exportToCSV() {
         data.submitTime
     ];
     
-    // Escape CSV values (handle commas and quotes)
     const escapeCSV = (value) => {
         if (value === null || value === undefined) return '';
         const str = String(value);
@@ -145,13 +137,11 @@ function exportToCSV() {
         return str;
     };
     
-    // Build CSV content
     const csvContent = [
         headers.map(escapeCSV).join(','),
         row.map(escapeCSV).join(',')
     ].join('\n');
     
-    // Create blob and download
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
@@ -165,47 +155,3 @@ function exportToCSV() {
     
     console.log('CSV exported successfully');
 }
-
-/**
- * Test Google Sheets connection
- * Call this function to verify API credentials are working
- */
-async function testGoogleSheetsConnection() {
-    try {
-        const settings = await loadSettings();
-        
-        if (!settings.googleApiKey || !settings.googleSheetId) {
-            return {
-                success: false,
-                message: 'API credentials not configured'
-            };
-        }
-        
-        // Try to read spreadsheet metadata
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${settings.googleSheetId}?key=${settings.googleApiKey}`;
-        
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            return {
-                success: false,
-                message: `API Error: ${errorData.error?.message || response.statusText}`
-            };
-        }
-        
-        const data = await response.json();
-        return {
-            success: true,
-            message: `Connected to spreadsheet: ${data.properties.title}`,
-            spreadsheetTitle: data.properties.title
-        };
-        
-    } catch (error) {
-        return {
-            success: false,
-            message: `Connection failed: ${error.message}`
-        };
-    }
-}
-

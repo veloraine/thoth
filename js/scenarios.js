@@ -34,13 +34,16 @@ async function initScenario(scenarioNumber) {
             quizQuestions = await loadConfig('reading/popup-quiz.json');
         }
         
+        // For scenario 4, shrink AI sidebar to 60% to make room for trivia
+        if (scenarioNumber === 4) {
+            document.getElementById('ai-sidebar').classList.add('with-trivia');
+        }
+        
         // Start appropriate interruptions
         switch(scenarioNumber) {
             case 1:
-                // No interruptions (control)
                 break;
             case 2:
-                // AI sidebar only (no timed interruptions)
                 break;
             case 3:
                 startQuizInterruptions();
@@ -67,12 +70,6 @@ async function initAISidebar() {
     
     // Show the toggle button
     toggleBtn.style.display = 'block';
-    
-    // Create backdrop
-    const backdrop = document.createElement('div');
-    backdrop.className = 'ai-sidebar-backdrop';
-    backdrop.id = 'ai-backdrop';
-    document.body.appendChild(backdrop);
     
     // Load quick actions
     let quickActionsList = [];
@@ -124,20 +121,15 @@ async function initAISidebar() {
         quickActions.appendChild(actionBtn);
     });
     
-    // Toggle sidebar open/close
+    // Toggle sidebar open/close (push layout, no backdrop)
     toggleBtn.addEventListener('click', function() {
-        sidebar.classList.add('open');
-        backdrop.classList.add('show');
+        const isOpen = sidebar.classList.toggle('open');
+        document.body.classList.toggle('ai-sidebar-open', isOpen);
     });
     
     closeBtn.addEventListener('click', function() {
         sidebar.classList.remove('open');
-        backdrop.classList.remove('show');
-    });
-    
-    backdrop.addEventListener('click', function() {
-        sidebar.classList.remove('open');
-        backdrop.classList.remove('show');
+        document.body.classList.remove('ai-sidebar-open');
     });
 }
 
@@ -281,10 +273,9 @@ function startQuizInterruptions() {
 }
 
 /**
- * Show random quiz question
+ * Show random quiz question in the trivia panel
  */
 function showRandomQuiz() {
-    // Get random unused question
     let availableIndices = [];
     for (let i = 0; i < quizQuestions.length; i++) {
         if (!usedQuizIndices.includes(i)) {
@@ -293,7 +284,7 @@ function showRandomQuiz() {
     }
     
     if (availableIndices.length === 0) {
-        return; // No more questions
+        return;
     }
     
     const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
@@ -302,36 +293,36 @@ function showRandomQuiz() {
     const questionData = quizQuestions[randomIndex];
     const startTime = new Date().toISOString();
     
-    const modal = bootstrap.Modal.getInstance(document.getElementById('quizModal')) || new bootstrap.Modal(document.getElementById('quizModal'));
+    const triviaPanel = document.getElementById('trivia-panel');
     
-    // Set question
-    document.getElementById('quiz-question').textContent = questionData.question;
+    document.getElementById('trivia-question').textContent = questionData.question;
     
-    // Set options
-    const optionsContainer = document.getElementById('quiz-options');
+    const optionsContainer = document.getElementById('trivia-options');
     optionsContainer.innerHTML = '';
     
     questionData.options.forEach((option, index) => {
         const div = document.createElement('div');
         div.className = 'form-check mb-2';
         div.innerHTML = `
-            <input class="form-check-input" type="radio" name="quiz-answer" id="quiz_${index}" value="${index}" required>
-            <label class="form-check-label" for="quiz_${index}">
+            <input class="form-check-input" type="radio" name="trivia-answer" id="trivia_${index}" value="${index}" required>
+            <label class="form-check-label" for="trivia_${index}">
                 ${option}
             </label>
         `;
         optionsContainer.appendChild(div);
     });
     
-    // Handle submit
-    document.getElementById('quiz-submit-btn').onclick = function() {
-        const selectedOption = document.querySelector('input[name="quiz-answer"]:checked');
+    // Show trivia panel (push layout)
+    triviaPanel.classList.add('open');
+    document.body.classList.add('trivia-panel-open');
+    
+    document.getElementById('trivia-submit-btn').onclick = function() {
+        const selectedOption = document.querySelector('input[name="trivia-answer"]:checked');
         if (!selectedOption) {
             alert('Please select an answer');
             return;
         }
         
-        // Record interaction
         addInteraction('quiz', {
             questionIndex: randomIndex,
             questionId: questionData.id,
@@ -342,11 +333,10 @@ function showRandomQuiz() {
             endTime: new Date().toISOString()
         });
         
-        modal.hide();
+        // Hide trivia panel
+        triviaPanel.classList.remove('open');
+        document.body.classList.remove('trivia-panel-open');
     };
-    
-    // Show modal
-    modal.show();
 }
 
 /**
@@ -360,13 +350,17 @@ function stopScenario() {
     
     // Close AI sidebar if open
     const sidebar = document.getElementById('ai-sidebar');
-    const backdrop = document.getElementById('ai-backdrop');
     if (sidebar) {
         sidebar.classList.remove('open');
     }
-    if (backdrop) {
-        backdrop.classList.remove('show');
+    document.body.classList.remove('ai-sidebar-open');
+    
+    // Close trivia panel if open
+    const triviaPanel = document.getElementById('trivia-panel');
+    if (triviaPanel) {
+        triviaPanel.classList.remove('open');
     }
+    document.body.classList.remove('trivia-panel-open');
     
     clearParagraphHighlights();
 }
@@ -395,9 +389,8 @@ function applyParagraphHighlight(paragraphNum) {
  */
 function scrollToParagraph(paragraphNum) {
     const sidebar = document.getElementById('ai-sidebar');
-    const backdrop = document.getElementById('ai-backdrop');
     if (sidebar) sidebar.classList.remove('open');
-    if (backdrop) backdrop.classList.remove('show');
+    document.body.classList.remove('ai-sidebar-open');
     
     const paragraph = document.getElementById('paragraph-' + paragraphNum);
     if (paragraph) {

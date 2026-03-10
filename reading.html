@@ -45,7 +45,7 @@
 
                         <!-- Finish Button -->
                         <div class="text-center mt-5">
-                            <button id="finish-reading-btn" class="btn btn-primary btn-lg">
+                            <button id="finish-reading-btn" class="btn btn-primary btn-lg" disabled>
                                 Finish Reading
                             </button>
                         </div>
@@ -82,22 +82,16 @@
         </div>
     </div>
 
-    <!-- Pop-up Quiz Modal -->
-    <div class="modal fade" id="quizModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-warning">
-                    <h5 class="modal-title">
-                        <i class="bi bi-question-circle"></i> Quick Comprehension Check
-                    </h5>
-                </div>
-                <div class="modal-body">
-                    <p class="fw-bold" id="quiz-question"></p>
-                    <div id="quiz-options"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="quiz-submit-btn">Submit Answer</button>
-                </div>
+    <!-- Trivia Panel (fixed bottom-right, for scenarios 3 & 4) -->
+    <div id="trivia-panel" class="trivia-panel">
+        <div class="trivia-panel-header">
+            <h5>Chat</h5>
+        </div>
+        <div class="trivia-panel-content">
+            <p class="fw-bold" id="trivia-question"></p>
+            <div id="trivia-options"></div>
+            <div class="text-center mt-3">
+                <button type="button" class="btn btn-primary" id="trivia-submit-btn">Submit Answer</button>
             </div>
         </div>
     </div>
@@ -115,8 +109,8 @@
     
     <script>
         let readingStartTime;
-        let quizModal;
         let readingTimerInterval;
+        let isLocalMode = false;
         
         // Initialize page
         document.addEventListener('DOMContentLoaded', async function() {
@@ -128,8 +122,15 @@
                 return;
             }
             
-            // Initialize quiz modal
-            quizModal = new bootstrap.Modal(document.getElementById('quizModal'));
+            // Load settings to check localMode
+            const readingSettings = await loadSettings();
+            isLocalMode = readingSettings.localMode === true;
+            
+            // Button starts disabled in HTML; enable immediately only in localMode
+            const finishBtn = document.getElementById('finish-reading-btn');
+            if (isLocalMode) {
+                finishBtn.disabled = false;
+            }
             
             // Record reading start time or get existing
             const existingSession = getSession();
@@ -191,17 +192,17 @@
                     // Ensure display shows 0:00
                     updateReadingTimerDisplay(0);
                     
-                    // Change badge color to danger when time's up
+                    // Change badge color to success when time's up
                     const badge = document.getElementById('reading-timer-display');
                     if (badge) {
                         badge.classList.remove('bg-warning');
-                        badge.classList.add('bg-danger', 'text-white');
+                        badge.classList.add('bg-success', 'text-white');
                     }
                     
-                    // Auto-advance to next page
-                    setTimeout(function() {
-                        finishReading();
-                    }, 1000); // Wait 1 second so user can see 0:00
+                    // Enable finish button
+                    const finishBtn = document.getElementById('finish-reading-btn');
+                    finishBtn.disabled = false;
+                    
                     return;
                 }
                 
@@ -233,6 +234,11 @@
         }
         
         function finishReading() {
+            // Guard: prevent finishing if button is still disabled
+            if (document.getElementById('finish-reading-btn').disabled) {
+                return;
+            }
+            
             // Stop timer
             if (readingTimerInterval) {
                 clearInterval(readingTimerInterval);

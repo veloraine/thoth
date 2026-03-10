@@ -666,20 +666,69 @@ body {
     }
 }
 
-/* === Sidebar Backdrop === */
-.ai-sidebar-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1040;
-    display: none;
+/* === Sidebar & Trivia Push Layout === */
+body {
+    transition: margin-right 0.3s ease-in-out;
 }
 
-.ai-sidebar-backdrop.show {
-    display: block;
+body.ai-sidebar-open,
+body.trivia-panel-open {
+    margin-right: 400px;
+}
+
+/* === Trivia Panel (bottom right) === */
+.trivia-panel {
+    position: fixed;
+    right: -400px;
+    bottom: 0;
+    width: 400px;
+    height: 40vh;
+    background-color: #ffffff;
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+    z-index: 1050;
+    transition: right 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.trivia-panel.open {
+    right: 0;
+}
+
+.trivia-panel-header {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    background-color: var(--warning-color);
+    border-bottom: 1px solid #e9ecef;
+}
+
+.trivia-panel-header h5 {
+    margin: 0;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.trivia-panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem 1.5rem;
+}
+
+.trivia-panel-content .form-check-label {
+    font-size: 0.95rem;
+}
+
+/* AI sidebar shrinks to 60% when trivia is co-active (scenario 4) */
+.ai-sidebar.with-trivia {
+    height: 60vh;
+}
+
+/* Move toggle button left when trivia panel is open */
+body.trivia-panel-open .ai-toggle-btn {
+    right: 430px;
 }
 
 /* === Badge Styles === */
@@ -750,10 +799,29 @@ body {
         font-size: 1.15rem;
     }
     
-    /* AI Sidebar - full width on mobile */
+    /* AI Sidebar & Trivia - full width overlay on mobile (no push) */
     .ai-sidebar {
         width: 100%;
         right: -100%;
+    }
+    
+    .trivia-panel {
+        width: 100%;
+        right: -100%;
+        height: 50vh;
+    }
+    
+    .ai-sidebar.with-trivia {
+        height: 50vh;
+    }
+    
+    body.ai-sidebar-open,
+    body.trivia-panel-open {
+        margin-right: 0;
+    }
+    
+    body.trivia-panel-open .ai-toggle-btn {
+        right: 15px;
     }
     
     #ai-assistant-toggle {

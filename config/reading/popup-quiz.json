@@ -1,74 +1,74 @@
 [
   {
     "id": "pq1",
-    "question": "What position needs to be filled at BBI?",
+    "question": "Which planet in our solar system has the most moons?",
     "type": "multiple-choice",
     "options": [
-      "VP of Marketing",
-      "Marketing Director",
-      "Brand Manager",
-      "Data Scientist"
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune"
     ],
     "correctAnswer": 1
   },
   {
     "id": "pq2",
-    "question": "What percentage match did Ed Yu receive from the people-analytics algorithm?",
+    "question": "What is the smallest country in the world by land area?",
     "type": "multiple-choice",
     "options": [
-      "83%",
-      "90%",
-      "96%",
-      "99%"
+      "Monaco",
+      "San Marino",
+      "Vatican City",
+      "Liechtenstein"
     ],
     "correctAnswer": 2
   },
   {
     "id": "pq3",
-    "question": "Who mentored Molly Ashworth through her subscription service launch?",
+    "question": "Which element has the chemical symbol 'Au'?",
     "type": "multiple-choice",
     "options": [
-      "Christine Jenkins",
-      "Brad Bibson",
-      "Ed Yu",
-      "Aliyah Jones"
-    ],
-    "correctAnswer": 3
-  },
-  {
-    "id": "pq4",
-    "question": "By how much did Ed Yu increase FreshFace sales?",
-    "type": "multiple-choice",
-    "options": [
-      "30%",
-      "45%",
-      "60%",
-      "80%"
+      "Silver",
+      "Aluminum",
+      "Gold",
+      "Argon"
     ],
     "correctAnswer": 2
   },
   {
-    "id": "pq5",
-    "question": "How many promotion decisions has the algorithm informed before this case?",
+    "id": "pq4",
+    "question": "How many bones does an adult human body have?",
     "type": "multiple-choice",
     "options": [
-      "One",
-      "Two",
-      "Three",
-      "Five"
+      "186",
+      "206",
+      "226",
+      "256"
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "id": "pq5",
+    "question": "What year did the first iPhone come out?",
+    "type": "multiple-choice",
+    "options": [
+      "2005",
+      "2006",
+      "2007",
+      "2008"
     ],
     "correctAnswer": 2
   },
   {
     "id": "pq6",
-    "question": "According to Brad's network analysis, whose network was broader?",
+    "question": "Which ocean is the largest by area?",
     "type": "multiple-choice",
     "options": [
-      "Molly had connections across multiple groups",
-      "Both had similar networks",
-      "Ed was connected to key people in other groups",
-      "Neither had significant networks"
+      "Atlantic Ocean",
+      "Indian Ocean",
+      "Arctic Ocean",
+      "Pacific Ocean"
     ],
-    "correctAnswer": 2
+    "correctAnswer": 3
   }
 ]

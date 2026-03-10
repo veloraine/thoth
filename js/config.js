@@ -5,7 +5,7 @@
 
 async function loadConfig(path) {
     try {
-        const response = await fetch(`config/${path}`);
+        const response = await fetch(`config/${path}?_=${Date.now()}`);
         
         if (!response.ok) {
             throw new Error(`Failed to load config: ${path}`);
@@ -43,21 +43,20 @@ async function loadSettings() {
             aiQuestionInterval: settings.aiQuestionInterval || 30,
             popupQuizInterval: settings.popupQuizInterval || 45,
             popupQuizCount: settings.popupQuizCount || 3,
-            googleSheetId: settings.googleSheetId || '',
-            googleApiKey: settings.googleApiKey || ''
+            supabaseUrl: settings.supabaseUrl || '',
+            supabaseAnonKey: settings.supabaseAnonKey || ''
         };
     } catch (error) {
         console.error('Error loading settings:', error);
-        // Return defaults if settings file doesn't exist
         return {
-            localMode: false, // Default to local mode if config fails to load
+            localMode: false,
             miniTestTimer: 120,
             readingTimer: 480,
             aiQuestionInterval: 30,
             popupQuizInterval: 45,
             popupQuizCount: 3,
-            googleSheetId: '',
-            googleApiKey: ''
+            supabaseUrl: '',
+            supabaseAnonKey: ''
         };
     }
 }

@@ -21,18 +21,72 @@ Install the "Live Server" extension and click "Go Live" in the bottom right.
 - Complete the study flow and download CSV data from the thank you page
 - **Remember:** Set `"localMode": false` before deploying to production!
 
-## Step 2: Set Up Google Sheets
+## Step 2: Set Up Supabase (Data Backend)
 
-1. Go to https://console.cloud.google.com/
+Since GitHub Pages requires a public repo, we use Supabase as the data backend. The Supabase `anon` key is safe to be public — data is protected by Row Level Security (RLS).
+
+### 2a. Create a Supabase Project
+
+1. Go to https://supabase.com and create a free account
 2. Create a new project
-3. Enable "Google Sheets API"
-4. Create an API Key (under Credentials)
-5. Add restriction: Your GitHub Pages URL (you'll get this in Step 3)
-6. Create a Google Sheet and copy its ID from the URL
-7. Make the sheet shareable: "Anyone with link" → "Editor"
-8. Update `config/general/settings.json` with your API key and sheet ID
+3. Note your **Project URL** and **anon public key** (Settings → API)
 
-**Detailed instructions:** See README.md → "Google Sheets Setup"
+### 2b. Create the Database Table
+
+Go to the **SQL Editor** in your Supabase dashboard and run:
+
+```sql
+CREATE TABLE responses (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  user_id TEXT NOT NULL,
+  scenario INTEGER,
+  consent_time TEXT,
+  mini_test_answers TEXT,
+  reading_start_time TEXT,
+  reading_end_time TEXT,
+  reading_duration INTEGER,
+  interaction_count INTEGER,
+  interactions TEXT,
+  manipulation_check_answers TEXT,
+  self_report_answers TEXT,
+  reading_comprehension_answers TEXT,
+  post_experiment_answers TEXT,
+  submit_time TEXT
+);
+```
+
+### 2c. Set Up Row Level Security (RLS)
+
+This ensures participants can only INSERT data but never read other responses:
+
+```sql
+-- Enable RLS
+ALTER TABLE responses ENABLE ROW LEVEL SECURITY;
+
+-- Allow anyone to insert (submit responses)
+CREATE POLICY "Allow anonymous inserts"
+  ON responses FOR INSERT
+  WITH CHECK (true);
+
+-- No SELECT/UPDATE/DELETE policy = no public read access
+-- Only you can read data via the Supabase dashboard or service role key
+```
+
+### 2d. Update Settings
+
+Edit `config/general/settings.json`:
+
+```json
+{
+  "localMode": false,
+  "supabaseUrl": "https://YOUR_PROJECT_ID.supabase.co",
+  "supabaseAnonKey": "YOUR_ANON_KEY_HERE",
+  ...
+}
+```
+
+> **Why is the anon key safe to be public?** Supabase's anon key is designed for client-side use. With RLS enabled, it can only perform operations you explicitly allow (INSERT only, in our case). Nobody can read, update, or delete data with it.
 
 ## Step 3: Deploy to GitHub Pages
 
@@ -40,7 +94,6 @@ Install the "Live Server" extension and click "Go Live" in the bottom right.
 2. Initialize git in your project folder:
    ```bash
    cd thoth
-   git init
    git add .
    git commit -m "Initial commit"
    git branch -M main
@@ -52,31 +105,28 @@ Install the "Live Server" extension and click "Go Live" in the bottom right.
 5. Click Save
 6. Your site will be live at: `https://yourusername.github.io/yourrepo/`
 
-## Step 4: Update API Restrictions
+### Scenario-Specific Links
 
-1. Go back to Google Cloud Console
-2. Edit your API Key
-3. Add your GitHub Pages URL as an allowed HTTP referrer:
-   `https://yourusername.github.io/yourrepo/*`
-4. Save
+You can distribute links that force a specific scenario:
+- `https://yourusername.github.io/yourrepo/?s=1` — Scenario 1 (control)
+- `https://yourusername.github.io/yourrepo/?s=2` — Scenario 2 (AI only)
+- `https://yourusername.github.io/yourrepo/?s=3` — Scenario 3 (quiz only)
+- `https://yourusername.github.io/yourrepo/?s=4` — Scenario 4 (AI + quiz)
 
-## Done! 🎉
+Without `?s=`, scenarios are assigned randomly.
 
-Your research website is now live and collecting data to Google Sheets!
+## Done!
+
+Your research website is now live and collecting data to Supabase!
 
 ## Testing Your Setup
 
 1. Visit your GitHub Pages URL
 2. Complete the full study flow
-3. Check your Google Sheet for the submitted data
+3. Check your Supabase dashboard (Table Editor → responses) for the submitted data
 4. If data doesn't appear, check browser console (F12) for errors
 
 ## Customization
-
-### Change Completion URL
-Edit: `thank-you.html` (line ~102)
-- Replace `https://example.com/complete/` with your actual URL
-- The `${userId}` will be automatically included
 
 ### Change the Article
 Edit: `config/reading/article.md`
@@ -84,31 +134,27 @@ Edit: `config/reading/article.md`
 ### Change Questions
 Edit JSON files in:
 - `config/pre-test/` - Mini test questions
+- `config/reading/` - AI questions and pop-up quiz
 - `config/post-test/` - All post-reading questionnaires
 
 ### Change Timers
 Edit: `config/general/settings.json`
 - `miniTestTimer`: Seconds for mini test (default: 120)
 - `readingTimer`: Seconds for reading (default: 480)
-- `aiQuestionInterval`: Seconds between AI help (default: 30)
 - `popupQuizInterval`: Seconds between quizzes (default: 45)
+- `popupQuizCount`: Max number of pop-up quizzes (default: 3)
 
 ### Change Consent Form
 Edit: `config/general/consent.md`
 
-## Need Help?
-
-Check the full README.md for:
-- Detailed Google Sheets setup
-- Troubleshooting common issues
-- Advanced customization options
-- Question format examples
+### Change Completion URL
+Edit: `thank-you.html` (~line 102)
 
 ## Common Issues
 
 **Data not submitting?**
-- Check Google Sheets API key and sheet ID in `config/general/settings.json`
-- Verify sheet is shared as "Anyone with link" → "Editor"
+- Check `supabaseUrl` and `supabaseAnonKey` in `config/general/settings.json`
+- Verify RLS policies are set up correctly
 - Check browser console (F12) for errors
 
 **Timer not starting?**
@@ -118,4 +164,3 @@ Check the full README.md for:
 **Questions not showing?**
 - Validate JSON format at jsonlint.com
 - Ensure all question files exist in config folders
-
