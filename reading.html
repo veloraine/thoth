@@ -34,7 +34,7 @@
                                 <!-- Article title will be here from markdown -->
                             </div>
                             <span class="badge bg-warning text-dark fs-5" id="reading-timer-display" style="white-space: nowrap;">
-                                <span id="reading-timer">8:00</span>
+                                <span id="reading-timer">--:--</span>
                             </span>
                         </div>
                         
@@ -132,19 +132,22 @@
                 finishBtn.disabled = false;
             }
             
+            // Use timer duration from settings
+            const readingDuration = readingSettings.readingTimer;
+            
             // Record reading start time or get existing
             const existingSession = getSession();
             if (existingSession.readingStartTime) {
                 // Page was refreshed - calculate remaining time
                 readingStartTime = existingSession.readingStartTime;
                 const elapsed = Math.floor((new Date() - new Date(readingStartTime)) / 1000);
-                const remaining = Math.max(0, 480 - elapsed);
+                const remaining = Math.max(0, readingDuration - elapsed);
                 startReadingTimer(remaining);
             } else {
                 // First time on this page
                 readingStartTime = new Date().toISOString();
                 updateSession({ readingStartTime: readingStartTime });
-                startReadingTimer(480); // 8 minutes = 480 seconds
+                startReadingTimer(readingDuration);
             }
             
             // Load article
