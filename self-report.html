@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
     <title>Self-Report Survey - Research Study</title>
     
     <!-- Bootstrap 5 CSS -->
@@ -57,6 +59,8 @@
     <script src="js/storage.js"></script>
     
     <script>
+        let loadedQuestions = [];
+        
         // Initialize page
         document.addEventListener('DOMContentLoaded', async function() {
             // Check session
@@ -66,11 +70,9 @@
                 window.location.href = 'index.html';
                 return;
             }
-            
-            // Load questions
             try {
-                const questions = await loadConfig('post-test/self-report.json');
-                renderQuestions(questions);
+                loadedQuestions = await loadConfig('post-test/self-report.json');
+                renderQuestions(loadedQuestions);
             } catch (error) {
                 console.error('Error loading questions:', error);
                 document.getElementById('questions-container').innerHTML = '<p class="text-danger">Error loading questions. Please refresh the page.</p>';
@@ -135,9 +137,18 @@
             const formData = new FormData(form);
             const answers = {};
             
-            for (let [key, value] of formData.entries()) {
-                answers[key] = value;
-            }
+            loadedQuestions.forEach(function(q) {
+                const val = formData.get('q' + q.id);
+                if (val === null) return;
+                const entry = { question: q.question };
+                if (q.type === 'multiple-choice') {
+                    entry.answer = q.options[parseInt(val)];
+                } else if (q.type === 'likert') {
+                    entry.answer = parseInt(val);
+                    if (q.labels) entry.scale = q.labels[0] + ' - ' + q.labels[1];
+                }
+                answers[q.id] = entry;
+            });
             
             updateSession({ selfReportAnswers: answers });
             window.location.href = 'reading-comprehension.html';

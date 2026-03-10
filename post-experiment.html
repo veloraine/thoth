@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
     <title>Post-Experiment Questionnaire - Research Study</title>
     
     <!-- Bootstrap 5 CSS -->
@@ -75,6 +77,8 @@
     <script src="js/sheets-api.js"></script>
     
     <script>
+        let loadedDemographics = [];
+        
         // Initialize page
         document.addEventListener('DOMContentLoaded', async function() {
             // Check session
@@ -84,17 +88,16 @@
                 window.location.href = 'index.html';
                 return;
             }
-            
-            // Load questions
             try {
                 const questions = await loadConfig('post-test/post-experiment.json');
                 
                 if (questions.demographics) {
-                    renderQuestions(questions.demographics, 'demographics-container', 'demo');
+                    loadedDemographics = questions.demographics;
+                    renderQuestions(loadedDemographics, 'demographics-container', 'demo');
                 }
             } catch (error) {
                 console.error('Error loading questions:', error);
-                document.getElementById('mmi-container').innerHTML = '<p class="text-danger">Error loading questions. Please refresh the page.</p>';
+                document.getElementById('demographics-container').innerHTML = '<p class="text-danger">Error loading questions. Please refresh the page.</p>';
             }
             
             // Handle form submission
@@ -160,14 +163,25 @@
             submitBtn.disabled = true;
             spinner.classList.remove('d-none');
             
-            // Collect form data
+            // Collect form data with answer text
             const form = document.getElementById('post-experiment-form');
             const formData = new FormData(form);
             const postExpAnswers = {};
             
-            for (let [key, value] of formData.entries()) {
-                postExpAnswers[key] = value;
-            }
+            loadedDemographics.forEach(function(q) {
+                const val = formData.get('demo_' + q.id);
+                if (val === null) return;
+                const entry = { question: q.question };
+                if (q.type === 'multiple-choice') {
+                    entry.answer = q.options[parseInt(val)];
+                } else if (q.type === 'likert') {
+                    entry.answer = parseInt(val);
+                    if (q.labels) entry.scale = q.labels[0] + ' - ' + q.labels[1];
+                } else {
+                    entry.answer = val;
+                }
+                postExpAnswers[q.id] = entry;
+            });
             
             updateSession({ postExperimentAnswers: postExpAnswers });
             

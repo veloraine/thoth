@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
     <title>Mini Test - Research Study</title>
     
     <!-- Bootstrap 5 CSS -->
@@ -76,14 +78,15 @@
             // Load settings and questions
             try {
                 const settings = await loadConfig('general/settings.json');
-                const questions = await loadConfig('pre-test/mini-test-questions.json');
+                const loadedQuestions = await loadConfig('pre-test/mini-test-questions.json');
+                window._miniTestQuestions = loadedQuestions;
                 
                 // Update timer display
                 const timerMinutes = Math.floor(settings.miniTestTimer / 60);
                 document.getElementById('timer-minutes').textContent = timerMinutes;
                 
                 // Render questions
-                renderQuestions(questions);
+                renderQuestions(loadedQuestions);
                 
                 // Start timer
                 startTimer(settings.miniTestTimer, function() {
@@ -135,25 +138,30 @@
         }
         
         function submitTest() {
-            // Stop timer
             stopTimer();
             
-            // Collect answers
             const form = document.getElementById('mini-test-form');
             const formData = new FormData(form);
+            const questions = window._miniTestQuestions || [];
             const answers = {};
             
-            for (let [key, value] of formData.entries()) {
-                answers[key] = parseInt(value);
-            }
+            questions.forEach(function(q) {
+                const val = formData.get('q' + q.id);
+                if (val === null) return;
+                const selectedIndex = parseInt(val);
+                answers[q.id] = {
+                    question: q.question,
+                    answer: q.options[selectedIndex],
+                    correctAnswer: q.options[q.correctAnswer],
+                    isCorrect: selectedIndex === q.correctAnswer
+                };
+            });
             
-            // Save to session
             updateSession({
                 miniTestAnswers: answers,
                 miniTestEndTime: new Date().toISOString()
             });
             
-            // Navigate to scenario instruction
             window.location.href = 'scenario-instruction.html';
         }
     </script>

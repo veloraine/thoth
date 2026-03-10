@@ -8,7 +8,8 @@
       "FreshFace Corporation",
       "Google",
       "Setty Analytics Inc."
-    ]
+    ],
+    "correctAnswer": 0
   },
   {
     "id": "rc2",
@@ -19,7 +20,8 @@
       "A subscription service for cleaning products",
       "A people-analytics system",
       "A customer research program"
-    ]
+    ],
+    "correctAnswer": 1
   },
   {
     "id": "rc3",
@@ -30,7 +32,8 @@
       "Creating the people-analytics algorithm",
       "Reviving the FreshFace product line with 60% sales increase",
       "Building a cross-division network"
-    ]
+    ],
+    "correctAnswer": 2
   },
   {
     "id": "rc4",
@@ -41,7 +44,8 @@
       "83%",
       "90%",
       "96%"
-    ]
+    ],
+    "correctAnswer": 1
   },
   {
     "id": "rc5",
@@ -52,7 +56,8 @@
       "Brand-new, with only three prior promotion decisions",
       "Based on external industry benchmarks",
       "Fully transparent and well-understood"
-    ]
+    ],
+    "correctAnswer": 1
   },
   {
     "id": "rc6",
@@ -63,7 +68,8 @@
       "Ed is at risk of leaving BBI and there's no beauty division opening",
       "Ed has more years of experience",
       "Molly doesn't want the job"
-    ]
+    ],
+    "correctAnswer": 1
   },
   {
     "id": "rc7",
@@ -74,7 +80,8 @@
       "Stiff and rigid",
       "Knocked it out of the park",
       "Good but lacking vision"
-    ]
+    ],
+    "correctAnswer": 2
   },
   {
     "id": "rc8",
@@ -85,7 +92,8 @@
       "Only for entry-level hiring",
       "As a complement to, not substitute for, human judgment",
       "To replace managers in the decision process"
-    ]
+    ],
+    "correctAnswer": 2
   },
   {
     "id": "rc9",
@@ -96,7 +104,8 @@
       "She was not flagged as a flight risk",
       "She had already submitted her resignation",
       "The algorithm didn't analyze flight risk"
-    ]
+    ],
+    "correctAnswer": 1
   },
   {
     "id": "rc10",
@@ -107,6 +116,7 @@
       "He was connected to key people in other groups",
       "He had fewer connections than Molly",
       "He had no significant professional network"
-    ]
+    ],
+    "correctAnswer": 1
   }
 ]

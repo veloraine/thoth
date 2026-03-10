@@ -198,12 +198,9 @@ function showAIAnswer(questionData, questionIndex, startTime) {
             });
         }
         
-        // Record interaction
         addInteraction('ai_question', {
             questionIndex: questionIndex,
             question: questionData.question,
-            answer: questionData.answer,
-            highlightedParagraph: questionData.highlightParagraph || null,
             startTime: startTime,
             endTime: endTime
         });
@@ -248,9 +245,7 @@ function showQuickAction(action, startTime) {
             </div>
         `;
         
-        // Record interaction
         addInteraction('ai_quick_action', {
-            actionId: action.id,
             actionLabel: action.label,
             startTime: startTime,
             endTime: new Date().toISOString()
@@ -323,12 +318,9 @@ function showRandomQuiz() {
             return;
         }
         
-        addInteraction('quiz', {
-            questionIndex: randomIndex,
-            questionId: questionData.id,
-            selectedAnswer: parseInt(selectedOption.value),
-            correctAnswer: questionData.correctAnswer,
-            isCorrect: parseInt(selectedOption.value) === questionData.correctAnswer,
+        addInteraction('trivia', {
+            question: questionData.question,
+            selectedAnswer: questionData.options[parseInt(selectedOption.value)],
             startTime: startTime,
             endTime: new Date().toISOString()
         });
