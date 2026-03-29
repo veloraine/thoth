@@ -1,74 +1,38 @@
 [
   {
-    "id": "pq1",
-    "question": "Which planet in our solar system has the most moons?",
+    "id": "msg1",
+    "question": "Did u see the prof's email? The essay deadline got moved UP to Friday! 😱 Gotta finish it fast!. Today is Wednesday, how many days do we have left to finish?",
     "type": "multiple-choice",
     "options": [
-      "Jupiter",
-      "Saturn",
-      "Uranus",
-      "Neptune"
+      "1 day",
+      "2 days",
+      "5 days",
+      "1 week"
     ],
     "correctAnswer": 1
   },
   {
-    "id": "pq2",
-    "question": "What is the smallest country in the world by land area?",
+    "id": "msg2",
+    "question": "OMG! 😭 My lappy just freeze mid essay😭💀wut do i even do 😩 wait it out or restart?? service ctr maybe??? The manual says if the light is red, charge it, if blue, restart it. My light is kinda blueish what should I do???",
     "type": "multiple-choice",
     "options": [
-      "Monaco",
-      "San Marino",
-      "Vatican City",
-      "Liechtenstein"
+      "Charge it",
+      "Call the service center",
+      "Force restart",
+      "Buy a new one"
     ],
     "correctAnswer": 2
   },
   {
-    "id": "pq3",
-    "question": "Which element has the chemical symbol 'Au'?",
+    "id": "msg3",
+    "question": "Hey!! 😅 I just realized I double-booked myself with 2 online classes at same time tomorrow 😭 any idea how I can fix it? One is recorded, the other live. What should I do?",
     "type": "multiple-choice",
     "options": [
-      "Silver",
-      "Aluminum",
-      "Gold",
-      "Argon"
+      "Watch recorded later & attend live",
+      "Skip live & watch recorded",
+      "Mail prof to change section",
+      "Attend both (somehow 😬)"
     ],
-    "correctAnswer": 2
-  },
-  {
-    "id": "pq4",
-    "question": "How many bones does an adult human body have?",
-    "type": "multiple-choice",
-    "options": [
-      "186",
-      "206",
-      "226",
-      "256"
-    ],
-    "correctAnswer": 1
-  },
-  {
-    "id": "pq5",
-    "question": "What year did the first iPhone come out?",
-    "type": "multiple-choice",
-    "options": [
-      "2005",
-      "2006",
-      "2007",
-      "2008"
-    ],
-    "correctAnswer": 2
-  },
-  {
-    "id": "pq6",
-    "question": "Which ocean is the largest by area?",
-    "type": "multiple-choice",
-    "options": [
-      "Atlantic Ocean",
-      "Indian Ocean",
-      "Arctic Ocean",
-      "Pacific Ocean"
-    ],
-    "correctAnswer": 3
+    "correctAnswer": 0
   }
 ]
