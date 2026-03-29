@@ -38,7 +38,7 @@
                             </div>
 
                             <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-success btn-lg" id="submit-btn">
+                                <button type="submit" class="btn btn-success btn-lg" id="submit-btn" disabled>
                                     <span class="spinner-border spinner-border-sm d-none" id="spinner"></span>
                                     Submit All Data
                                 </button>
@@ -94,7 +94,27 @@
                 e.preventDefault();
                 await submitAllData();
             });
+            
+            document.getElementById('post-experiment-form').addEventListener('change', checkAllAnswered);
         });
+        
+        function checkAllAnswered() {
+            const form = document.getElementById('post-experiment-form');
+            const radioGroups = new Set();
+            form.querySelectorAll('input[type="radio"]').forEach(r => radioGroups.add(r.name));
+            
+            let allAnswered = radioGroups.size > 0;
+            radioGroups.forEach(name => {
+                if (!form.querySelector(`input[name="${name}"]:checked`)) allAnswered = false;
+            });
+            
+            const inputs = form.querySelectorAll('input[type="text"], input[type="number"]');
+            inputs.forEach(input => {
+                if (!input.value.trim()) allAnswered = false;
+            });
+            
+            document.getElementById('submit-btn').disabled = !allAnswered;
+        }
         
         function renderQuestions(questions, containerId, prefix) {
             const container = document.getElementById(containerId);
