@@ -9,7 +9,7 @@ This experiment examines how AI-assisted reading affects students' reading compr
 
 **Part 1: Main experiment**
 - You will read the provided article within 6 minutes.
-- You are **required** to respond to incoming messages by selecting one of the provided options during the reading task.
+- You are <span style="color: #dc3545; font-weight: bold;">required</span> to respond to incoming messages by selecting one of the provided options during the reading task.
 - Please focus and complete the reading task carefully.
 
 <div style="display: flex; gap: 24px; margin: 24px 0; align-items: flex-start; max-width: 280px;">
