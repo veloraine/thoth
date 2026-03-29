@@ -67,7 +67,7 @@
                     </div>
                     
                     <div id="ai-questions-section" class="mb-4">
-                        <h6 class="mb-3 text-muted">Ask the AI</h6>
+                        <h6 class="mb-3 text-muted">Questions you can ask</h6>
                         <div id="ai-questions-list">
                             <!-- AI question buttons will be loaded here -->
                         </div>
@@ -76,7 +76,7 @@
                     <hr class="my-3">
                     
                     <div id="ai-quick-actions">
-                        <h6 class="mb-3 text-muted">Quick Actions</h6>
+                        <h6 class="mb-3 text-muted">Actions</h6>
                         <!-- Quick action buttons -->
                     </div>
                 </div>
@@ -105,9 +105,9 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <!-- Custom JS -->
-    <script src="js/config.js"></script>
-    <script src="js/storage.js"></script>
-    <script src="js/scenarios.js"></script>
+    <script src="js/config.js?v=2"></script>
+    <script src="js/storage.js?v=2"></script>
+    <script src="js/scenarios.js?v=2"></script>
     
     <script>
         let readingStartTime;
@@ -193,21 +193,8 @@
                 // Check if time's up
                 if (remainingSeconds <= 0) {
                     clearInterval(readingTimerInterval);
-                    
-                    // Ensure display shows 0:00
                     updateReadingTimerDisplay(0);
-                    
-                    // Change badge color to success when time's up
-                    const badge = document.getElementById('reading-timer-display');
-                    if (badge) {
-                        badge.classList.remove('bg-warning');
-                        badge.classList.add('bg-success', 'text-white');
-                    }
-                    
-                    // Enable finish button
-                    const finishBtn = document.getElementById('finish-reading-btn');
-                    finishBtn.disabled = false;
-                    
+                    finishReading(true);
                     return;
                 }
                 
@@ -238,9 +225,8 @@
             }
         }
         
-        function finishReading() {
-            // Guard: prevent finishing if button is still disabled
-            if (document.getElementById('finish-reading-btn').disabled) {
+        function finishReading(timerExpired) {
+            if (!timerExpired && document.getElementById('finish-reading-btn').disabled) {
                 return;
             }
             
@@ -262,7 +248,7 @@
             });
             
             // Navigate to manipulation check
-            window.location.href = 'manipulation-check.html';
+            window.location.href = 'self-report.html';
         }
     </script>
 </body>

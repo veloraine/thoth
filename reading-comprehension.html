@@ -19,17 +19,24 @@
             <div class="col-lg-8">
                 <!-- Progress Indicator -->
                 <div class="progress mb-4" style="height: 8px;">
-                    <div class="progress-bar" role="progressbar" style="width: 77%;" aria-valuenow="77" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
 
                 <!-- Reading Comprehension Card -->
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
-                        <h1 class="card-title text-center mb-4">Post-Reading Questionnaire (3/4)</h1>
-                        <h3 class="text-center text-muted mb-4">Reading Comprehension Test</h3>
+                        <!-- Header with Timer -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h1 class="card-title mb-0">Reading Comprehension Test</h1>
+                            </div>
+                            <span class="badge bg-warning text-dark fs-5" id="timer-display">
+                                <span id="comp-timer">--:--</span>
+                            </span>
+                        </div>
                         
                         <div class="alert alert-info mb-4">
-                            Answer the following questions based on the article you just read.
+                            Answer the following questions based on the article you just read. You have <strong id="timer-minutes">4</strong> minutes to complete this test.
                         </div>
 
                         <!-- Questions Form -->
@@ -41,7 +48,7 @@
                             <!-- Submit Button -->
                             <div class="text-center mt-4">
                                 <button type="submit" class="btn btn-primary btn-lg">
-                                    Continue
+                                    Submit Answers
                                 </button>
                             </div>
                         </form>
@@ -60,6 +67,7 @@
     
     <script>
         let loadedQuestions = [];
+        let compTimerInterval;
         
         // Initialize page
         document.addEventListener('DOMContentLoaded', async function() {
@@ -71,8 +79,15 @@
                 return;
             }
             try {
+                const settings = await loadConfig('general/settings.json');
                 loadedQuestions = await loadConfig('post-test/reading-comprehension.json');
                 renderQuestions(loadedQuestions);
+                
+                const timerSeconds = settings.comprehensionTimer || 240;
+                const timerMinutes = Math.floor(timerSeconds / 60);
+                document.getElementById('timer-minutes').textContent = timerMinutes;
+                
+                startCompTimer(timerSeconds);
             } catch (error) {
                 console.error('Error loading questions:', error);
                 document.getElementById('questions-container').innerHTML = '<p class="text-danger">Error loading questions. Please refresh the page.</p>';
@@ -84,6 +99,40 @@
                 submitForm();
             });
         });
+        
+        function startCompTimer(seconds) {
+            let remaining = seconds;
+            updateTimerDisplay(remaining);
+            
+            compTimerInterval = setInterval(function() {
+                remaining--;
+                
+                if (remaining <= 0) {
+                    clearInterval(compTimerInterval);
+                    updateTimerDisplay(0);
+                    submitForm();
+                    return;
+                }
+                
+                updateTimerDisplay(remaining);
+                
+                if (remaining <= 30) {
+                    const badge = document.getElementById('timer-display');
+                    if (badge) {
+                        badge.classList.remove('bg-warning');
+                        badge.classList.add('bg-danger', 'text-white');
+                    }
+                }
+            }, 1000);
+        }
+        
+        function updateTimerDisplay(seconds) {
+            const safe = Math.max(0, seconds);
+            const m = Math.floor(safe / 60);
+            const s = safe % 60;
+            const el = document.getElementById('comp-timer');
+            if (el) el.textContent = m + ':' + s.toString().padStart(2, '0');
+        }
         
         function renderQuestions(questions) {
             const container = document.getElementById('questions-container');
@@ -117,26 +166,31 @@
         }
         
         function submitForm() {
+            if (compTimerInterval) clearInterval(compTimerInterval);
+            
             const form = document.getElementById('comprehension-form');
             const formData = new FormData(form);
             const answers = {};
+            let correctCount = 0;
             
             loadedQuestions.forEach(function(q) {
                 const val = formData.get('q' + q.id);
                 if (val === null) return;
                 const selectedIndex = parseInt(val);
+                const isCorrect = selectedIndex === q.correctAnswer;
+                if (isCorrect) correctCount++;
                 answers[q.id] = {
-                    question: q.question,
                     answer: q.options[selectedIndex],
-                    correctAnswer: q.options[q.correctAnswer],
-                    isCorrect: selectedIndex === q.correctAnswer
+                    isCorrect: isCorrect
                 };
             });
             
-            updateSession({ readingComprehensionAnswers: answers });
-            window.location.href = 'post-experiment.html';
+            updateSession({
+                readingComprehensionAnswers: answers,
+                readingComprehensionScore: correctCount * 10
+            });
+            window.location.href = 'manipulation-check.html';
         }
     </script>
 </body>
 </html>
-

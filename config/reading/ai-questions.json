@@ -5,23 +5,43 @@
     "highlightParagraph": 2
   },
   {
-    "question": "Why might the algorithm's recommendation not be fully trustworthy?",
-    "answer": "Hint: See paragraph 7. Look at what Brad Bibson says about the algorithm's track record. How many decisions has it informed so far, and what does he say about the outcomes?",
-    "highlightParagraph": 7
+    "question": "What does \"High Potential\" (HiPo) mean in the context of BBI employees?",
+    "answer": "Hint: See paragraph 3. Notice that both Ed and Molly were \"quickly tapped\" for this label right out of business school. If a company sees \"potential\" in a new hire, are they treating them as a regular worker or a future leader?",
+    "highlightParagraph": 3
   },
   {
-    "question": "What does Christine mean by saying HR decisions should be \"less biased by personal feelings\"?",
-    "answer": "Hint: See paragraph 6. Christine argues that data-driven decisions are more objective. Now consider — could Aliyah's preference for Molly be influenced by their mentor-mentee relationship rather than pure qualifications?",
-    "highlightParagraph": 6
+    "question": "What is \"Network Analysis\" as mentioned by Brad?",
+    "answer": "Hint: See paragraph 5. Brad explains that they analyzed \"e-mail and meeting history\" to create a diagram. How does tracking these digital footprints help HR see connections that a manager might miss?",
+    "highlightParagraph": 5
   },
   {
-    "question": "Why is Ed Yu considered a \"flight risk\" and why does that matter for the decision?",
-    "answer": "Hint: See paragraph 8. Look at what Christine reveals about Ed's likelihood of leaving BBI. If there's no opening in beauty products, what happens if Ed doesn't get promoted here?",
+    "question": "What does the term \"Flight Risk\" mean?",
+    "answer": "Hint: Look at the algorithm section and see paragraph 8. HR says Ed is at the \"top of the list\" for this. If there are no openings in his current division and he is \"at risk\", what is HR afraid Ed might do?",
     "highlightParagraph": 8
   },
   {
-    "question": "What does Prasad Setty mean by saying analytics should \"complement, not substitute for\" human judgment?",
-    "answer": "Hint: See paragraph 9. Setty acknowledges the algorithm surfaced a good candidate, but says the \"burden of proof is very high\" for algorithmic decisions. What role should Aliyah play — should she follow the data or make her own call?",
+    "question": "What factors mentioned in the text contribute to the tension between Aliyah's judgment and the algorithm's score?",
+    "answer": "Hint: Contrast what the algorithm measures in Paragraph 5 (digital logs) with the interview in Paragraph 4 (warmth, dynamism). Why would a \"stiff\" person score higher on a computer than in a human interview?",
+    "highlightParagraph": 5
+  },
+  {
+    "question": "What concerns about algorithm use are raised in the case?",
+    "answer": "Hint: See Paragraph 7. Notice that Brad warns the system is \"brand-new\" with a limited track record, while Aliyah admits she doesn't understand how it works. Why are these both risks for the company?",
+    "highlightParagraph": 7
+  },
+  {
+    "question": "What role does expert Prasad Setty suggest analytics should play?",
+    "answer": "Hint: Look at Paragraph 9. Setty describes how analytics and human judgment should work together. Does he believe the algorithm should take over the decision, or should it simply support the manager? Look for the specific word he uses to describe this partnership.",
+    "highlightParagraph": 9
+  },
+  {
+    "question": "How is network analysis described as different from traditional interviews?",
+    "answer": "Hint: Compare Paragraph 4 and Paragraph 5. One uses data to map a candidate's reach across the whole company, while the other uses a conversation to judge their personality and readiness. Notice how these two methods differ?",
+    "highlightParagraph": 5
+  },
+  {
+    "question": "What does expert Prasad Setty mean by the algorithm's \"burden of proof\"?",
+    "answer": "Hint: See Paragraph 9. Setty argues that for an AI to decide for a human, the evidence must be \"very high.\" Based on the small number of previous decisions in paragraph 7, has the BBI algorithm met this \"burden\" yet?",
     "highlightParagraph": 9
   }
 ]

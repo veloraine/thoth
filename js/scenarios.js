@@ -213,7 +213,25 @@ function showAIAnswer(questionData, questionIndex, startTime) {
 function showQuickAction(action, startTime) {
     const currentInteraction = document.getElementById('current-ai-interaction');
     
-    // Show request with thinking animation
+    if (action.type === 'image' && action.image) {
+        currentInteraction.innerHTML = `
+            <div class="ai-current-question">
+                <h6>Request</h6>
+                <p>${action.label}</p>
+            </div>
+            <div class="ai-answer-display">
+                <img src="${action.image}" alt="Infographic" style="width:100%; border-radius:8px;">
+            </div>
+        `;
+        
+        addInteraction('ai_quick_action', {
+            actionLabel: action.label,
+            startTime: startTime,
+            endTime: new Date().toISOString()
+        });
+        return;
+    }
+    
     currentInteraction.innerHTML = `
         <div class="ai-current-question">
             <h6>Request</h6>
@@ -229,11 +247,9 @@ function showQuickAction(action, startTime) {
         </div>
     `;
     
-    // Random delay between 1-4 seconds (1000-4000ms)
     const thinkingDelay = Math.floor(Math.random() * 3000) + 1000;
     
     setTimeout(function() {
-        // Show the response
         currentInteraction.innerHTML = `
             <div class="ai-current-question">
                 <h6>Request</h6>
@@ -241,7 +257,7 @@ function showQuickAction(action, startTime) {
             </div>
             <div class="ai-answer-display">
                 <h6><span>💡</span> AI Response</h6>
-                <p>${action.response}</p>
+                <p>${action.response || ''}</p>
             </div>
         `;
         

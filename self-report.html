@@ -19,24 +19,27 @@
             <div class="col-lg-8">
                 <!-- Progress Indicator -->
                 <div class="progress mb-4" style="height: 8px;">
-                    <div class="progress-bar" role="progressbar" style="width: 66%;" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
 
                 <!-- Self-Report Card -->
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
-                        <h1 class="card-title text-center mb-4">Post-Reading Questionnaire (2/4)</h1>
-                        <h3 class="text-center text-muted mb-4">Self-Report Survey</h3>
+                        <h1 class="card-title text-center mb-4">Self-Reported Survey and Attention Check</h1>
                         
                         <div class="alert alert-info mb-4">
-                            Please rate your reading experience based on the following statements.
+                            Please answer the following questions about your reading experience.
                         </div>
 
                         <!-- Questions Form -->
                         <form id="self-report-form">
-                            <div id="questions-container">
+                            <div id="metacomprehension-container">
                                 <p class="text-center text-muted">Loading questions...</p>
                             </div>
+
+                            <div id="cognitive-load-container"></div>
+
+                            <div id="attention-check-container"></div>
 
                             <!-- Submit Button -->
                             <div class="text-center mt-4">
@@ -59,7 +62,9 @@
     <script src="js/storage.js"></script>
     
     <script>
-        let loadedQuestions = [];
+        let loadedMeta = [];
+        let loadedCogLoad = [];
+        let loadedAttention = [];
         
         // Initialize page
         document.addEventListener('DOMContentLoaded', async function() {
@@ -71,11 +76,24 @@
                 return;
             }
             try {
-                loadedQuestions = await loadConfig('post-test/self-report.json');
-                renderQuestions(loadedQuestions);
+                const data = await loadConfig('post-test/self-report.json');
+                
+                if (data.metacomprehension) {
+                    const metaSection = data.metacomprehension;
+                    loadedMeta = metaSection.questions || metaSection;
+                    renderSection(metaSection, loadedMeta, 'metacomprehension-container', 'meta');
+                }
+                if (data.cognitiveLoad) {
+                    loadedCogLoad = data.cognitiveLoad;
+                    renderQuestions(loadedCogLoad, 'cognitive-load-container', 'cl');
+                }
+                if (data.attentionCheck) {
+                    loadedAttention = data.attentionCheck;
+                    renderQuestions(loadedAttention, 'attention-check-container', 'ac');
+                }
             } catch (error) {
                 console.error('Error loading questions:', error);
-                document.getElementById('questions-container').innerHTML = '<p class="text-danger">Error loading questions. Please refresh the page.</p>';
+                document.getElementById('metacomprehension-container').innerHTML = '<p class="text-danger">Error loading questions. Please refresh the page.</p>';
             }
             
             // Handle form submission
@@ -85,32 +103,47 @@
             });
         });
         
-        function renderQuestions(questions) {
-            const container = document.getElementById('questions-container');
+        function renderSection(sectionData, questions, containerId, prefix) {
+            const container = document.getElementById(containerId);
             container.innerHTML = '';
+            
+            if (sectionData.description) {
+                const descDiv = document.createElement('div');
+                descDiv.className = 'mb-4';
+                descDiv.innerHTML = sectionData.description.split('\n\n').map(function(p) {
+                    return '<p>' + p + '</p>';
+                }).join('');
+                container.appendChild(descDiv);
+            }
+            
+            renderQuestions(questions, container, prefix);
+        }
+        
+        function renderQuestions(questions, container, prefix) {
+            if (typeof container === 'string') {
+                container = document.getElementById(container);
+                container.innerHTML = '';
+            }
             
             questions.forEach((q, index) => {
                 const questionDiv = document.createElement('div');
                 questionDiv.className = 'mb-4 p-3 border rounded';
                 
-                let html = `
-                    <h5 class="mb-3">Question ${index + 1}</h5>
-                    <p class="fw-bold">${q.question}</p>
-                `;
+                let html = '<p class="fw-bold">' + q.question.replace(/\n/g, '<br>') + '</p>';
                 
                 if (q.type === 'multiple-choice') {
                     q.options.forEach((option, optIndex) => {
                         html += `
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="q${q.id}" id="q${q.id}_${optIndex}" value="${optIndex}" required>
-                                <label class="form-check-label" for="q${q.id}_${optIndex}">
+                                <input class="form-check-input" type="radio" name="${prefix}_${q.id}" id="${prefix}_${q.id}_${optIndex}" value="${optIndex}" required>
+                                <label class="form-check-label" for="${prefix}_${q.id}_${optIndex}">
                                     ${option}
                                 </label>
                             </div>
                         `;
                     });
                 } else if (q.type === 'likert') {
-                    const scale = q.scale || 5;
+                    const scale = q.scale || 7;
                     html += '<div class="likert-scale">';
                     if (q.labels && q.labels.length === 2) {
                         html += `<div class="d-flex justify-content-between mb-2"><small>${q.labels[0]}</small><small>${q.labels[1]}</small></div>`;
@@ -119,12 +152,27 @@
                     for (let i = 1; i <= scale; i++) {
                         html += `
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="q${q.id}" id="q${q.id}_${i}" value="${i}" required>
-                                <label class="form-check-label" for="q${q.id}_${i}">${i}</label>
+                                <input class="form-check-input" type="radio" name="${prefix}_${q.id}" id="${prefix}_${q.id}_${i}" value="${i}" required>
+                                <label class="form-check-label" for="${prefix}_${q.id}_${i}">${i}</label>
                             </div>
                         `;
                     }
                     html += '</div></div>';
+                } else if (q.type === 'scale') {
+                    const min = q.min || 0;
+                    const max = q.max || 100;
+                    const step = q.step || 5;
+                    const count = Math.floor((max - min) / step) + 1;
+                    html += '<div style="display: grid; grid-template-columns: repeat(' + count + ', 1fr); gap: 0; margin-top: 12px; text-align: center;">';
+                    for (let i = min; i <= max; i += step) {
+                        html += `
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <input class="form-check-input" type="radio" name="${prefix}_${q.id}" id="${prefix}_${q.id}_${i}" value="${i}" required style="margin: 0;">
+                                <label class="form-check-label fw-bold" for="${prefix}_${q.id}_${i}" style="font-size: 0.8rem; margin-top: 4px;">${i}</label>
+                            </div>
+                        `;
+                    }
+                    html += '</div>';
                 }
                 
                 questionDiv.innerHTML = html;
@@ -132,28 +180,40 @@
             });
         }
         
-        function submitForm() {
-            const form = document.getElementById('self-report-form');
-            const formData = new FormData(form);
+        function collectAnswers(questions, prefix) {
+            const formData = new FormData(document.getElementById('self-report-form'));
             const answers = {};
-            
-            loadedQuestions.forEach(function(q) {
-                const val = formData.get('q' + q.id);
+            questions.forEach(function(q) {
+                const val = formData.get(prefix + '_' + q.id);
                 if (val === null) return;
-                const entry = { question: q.question };
                 if (q.type === 'multiple-choice') {
-                    entry.answer = q.options[parseInt(val)];
+                    const idx = parseInt(val);
+                    answers[q.id] = q.options[idx];
+                    if (q.correctAnswer !== undefined) {
+                        answers[q.id] = {
+                            answer: q.options[idx],
+                            isCorrect: idx === q.correctAnswer
+                        };
+                    }
                 } else if (q.type === 'likert') {
-                    entry.answer = parseInt(val);
-                    if (q.labels) entry.scale = q.labels[0] + ' - ' + q.labels[1];
+                    answers[q.id] = parseInt(val);
+                } else if (q.type === 'scale') {
+                    answers[q.id] = parseInt(val);
                 }
-                answers[q.id] = entry;
             });
+            return answers;
+        }
+        
+        function submitForm() {
+            const allAnswers = {
+                metacomprehension: collectAnswers(loadedMeta, 'meta'),
+                cognitiveLoad: collectAnswers(loadedCogLoad, 'cl'),
+                attentionCheck: collectAnswers(loadedAttention, 'ac')
+            };
             
-            updateSession({ selfReportAnswers: answers });
+            updateSession({ selfReportAnswers: allAnswers });
             window.location.href = 'reading-comprehension.html';
         }
     </script>
 </body>
 </html>
-

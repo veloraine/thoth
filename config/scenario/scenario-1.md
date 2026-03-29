@@ -1,52 +1,31 @@
-# Scenario 1: Uninterrupted Reading
+# Experiment Instruction
 
-## What to Expect
+**Welcome!**
+Thank you for participating in this experiment.
 
-You will read the article in a **traditional, uninterrupted manner** - just like reading a textbook or journal article on your own.
-
-### How It Works
-
-- **No AI assistance** will appear
-- **No pop-up quizzes** will interrupt you
-- **No interruptions** of any kind
-- Read at your own pace from start to finish
-- Click "Finish Reading" when you're done
-
-This is the most straightforward reading experience.
-
-## Your Task
-
-- **Read the article carefully** from beginning to end
-- **Focus on understanding** the main ideas, arguments, and findings
-- **Take your time** - there is no time limit
-- **Try to remember** the content, as you'll answer questions about it afterward
-- Read as you normally would for an academic assignment
-
-## Tips for Effective Reading
-
-Since you won't have AI assistance or quizzes to guide you:
-
-- **Pay attention to section headings** - they indicate main topics
-- **Note key terms and definitions** as they appear
-- **Identify the research question** and main findings
-- **Think about how ideas connect** as you read
-- **Consider rereading difficult sections** if needed
-
-## Important Notes
-
-- This is the **control condition** - the most natural reading experience
-- You have **full control** over your reading pace
-- There are no interruptions to manage
-- Focus on comprehension - you'll be tested on the content later
-- There is no time limit for reading
-
-## Reading Environment
-
-Try to create a distraction-free environment:
-- Find a quiet space if possible
-- Minimize other tabs or applications
-- Give the article your full attention
+This experiment examines how AI-assisted reading affects students' reading comprehension under media multitasking conditions. Your participation is voluntary, and all data collected will remain confidential and used solely for academic research purposes.
 
 ---
 
-When you're ready to begin uninterrupted reading, click the button below.
+**Part 1: Main experiment**
+- You will read the provided article within 6 minutes.
+- Please focus and complete the reading task carefully.
+
+**Part 2: Post reading task survey**
+After the reading task, you will complete:
+- Short metacomprehension questions.
+- A perceived cognitive load questionnaire.
+
+**Part 3: Reading comprehension test**
+- You will complete a reading comprehension test within 4 minutes.
+
+**Part 4: Post experiment questionnaire**
+- You will complete a short post experiment question and demographic.
+
+**Compensation**
+- You will receive compensation upon completing the entire experiment.
+- The total session will take approximately 16 minutes.
+
+<p style="color: #dc3545; font-weight: bold; font-style: italic;">If you quit midway and later resume, the timer will continue from where you left off.</p>
+
+Click **"Start"** to begin the reading task. Please note that ***you cannot return to this page***, so read the instructions carefully before proceeding.

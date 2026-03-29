@@ -25,18 +25,17 @@
                 <!-- Consent Card -->
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
-                        <h1 class="card-title text-center mb-4">Participant Information and Consent</h1>
+                        <h1 class="card-title text-center mb-4">Participant Consent Form</h1>
                         
                         <!-- Consent content will be loaded here -->
                         <div id="consent-content" class="consent-text mb-4">
                             <p class="text-center text-muted">Loading consent form...</p>
                         </div>
 
-                        <!-- User ID Display -->
-                        <div class="alert alert-info text-center" role="alert">
-                            <strong>Your Unique Participant ID:</strong>
-                            <h3 class="mt-2 mb-0" id="user-id">---------</h3>
-                            <small class="text-muted d-block mt-2">Please save this ID for your records</small>
+                        <!-- Participant ID Input -->
+                        <div class="mb-4">
+                            <label for="participant-id" class="form-label fw-bold">Participant Cloud Research ID:</label>
+                            <input type="text" class="form-control" id="participant-id" placeholder="Enter your ID" required>
                         </div>
 
                         <!-- Consent Checkbox -->
@@ -50,7 +49,7 @@
                         <!-- Continue Button -->
                         <div class="text-center">
                             <button id="continue-btn" class="btn btn-primary btn-lg" disabled>
-                                Continue to Instructions
+                                Continue to Study
                             </button>
                         </div>
                     </div>
@@ -67,23 +66,14 @@
     
     <!-- Custom JS -->
     <script src="js/config.js"></script>
-    <script src="js/uid-generator.js"></script>
     <script src="js/storage.js"></script>
     
     <script>
         // Initialize page
         document.addEventListener('DOMContentLoaded', async function() {
-            // Generate and display unique ID
-            const userId = generateUserId();
-            document.getElementById('user-id').textContent = userId;
-            
-            // Assign scenario: use ?s=1..4 query param if provided, otherwise random
-            const urlParams = new URLSearchParams(window.location.search);
-            const forcedScenario = parseInt(urlParams.get('s'));
-            const scenario = (forcedScenario >= 1 && forcedScenario <= 4) ? forcedScenario : Math.floor(Math.random() * 4) + 1;
-            
-            // Initialize session data
-            initSession(userId, scenario);
+            const idInput = document.getElementById('participant-id');
+            const checkbox = document.getElementById('consent-checkbox');
+            const continueBtn = document.getElementById('continue-btn');
             
             // Load consent content
             try {
@@ -94,18 +84,29 @@
                 document.getElementById('consent-content').innerHTML = '<p class="text-danger">Error loading consent form. Please refresh the page.</p>';
             }
             
-            // Enable continue button when checkbox is checked
-            const checkbox = document.getElementById('consent-checkbox');
-            const continueBtn = document.getElementById('continue-btn');
+            function updateButtonState() {
+                continueBtn.disabled = !(checkbox.checked && idInput.value.trim().length > 0);
+            }
             
-            checkbox.addEventListener('change', function() {
-                continueBtn.disabled = !this.checked;
-            });
+            checkbox.addEventListener('change', updateButtonState);
+            idInput.addEventListener('input', updateButtonState);
             
             // Handle continue button
             continueBtn.addEventListener('click', function() {
+                const userId = idInput.value.trim();
+                if (!userId) {
+                    alert('Please enter your Participant Cloud Research ID.');
+                    return;
+                }
+                
+                // Assign scenario: use ?s=1..4 query param if provided, otherwise random
+                const urlParams = new URLSearchParams(window.location.search);
+                const forcedScenario = parseInt(urlParams.get('s'));
+                const scenario = (forcedScenario >= 1 && forcedScenario <= 4) ? forcedScenario : Math.floor(Math.random() * 4) + 1;
+                
+                initSession(userId, scenario);
                 updateSession({ consentTime: new Date().toISOString() });
-                window.location.href = 'instruction.html';
+                window.location.href = 'scenario-instruction.html';
             });
         });
     </script>

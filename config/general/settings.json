@@ -1,10 +1,10 @@
 {
   "localMode": false,
-  "miniTestTimer": 120,
   "readingTimer": 360,
+  "comprehensionTimer": 240,
   "aiQuestionInterval": 30,
-  "popupQuizInterval": 20,
-  "popupQuizCount": 10,
-  "supabaseUrl": "",
-  "supabaseAnonKey": ""
+  "popupQuizInterval": 60,
+  "popupQuizCount": 3,
+  "supabaseUrl": "https://uhldtgwcixsrbyfjspga.supabase.co",
+  "supabaseAnonKey": "sb_publishable_VqSDrHKejOcpIfEtCyJCsA_8d2fX8Sj"
 }

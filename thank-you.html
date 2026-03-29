@@ -36,53 +36,24 @@
                         <p class="lead mb-4">Your responses have been successfully submitted.</p>
 
                         <div class="alert alert-info mb-4">
-                            <h5 class="mb-3">Your Participant ID</h5>
-                            <h2 class="mb-3" id="user-id-display" style="font-family: monospace; letter-spacing: 2px;">---------</h2>
-                            <small class="text-muted">Please save this ID for your records</small>
-                        </div>
-
-                        <div class="card bg-light mb-4">
-                            <div class="card-body">
-                                <h5 class="mb-3">Complete Your Participation</h5>
-                                <p class="mb-3">Please visit the following link to finalize your participation:</p>
-                                
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control form-control-lg text-center" id="completion-url" value="https://example.com/complete/XXXX" readonly>
-                                    <button class="btn btn-primary" type="button" id="copy-btn">
-                                        <span id="copy-text">Copy Link</span>
-                                    </button>
-                                </div>
-
-                                <div class="alert alert-success d-none" id="copy-success">
-                                    ✓ Link copied to clipboard!
-                                </div>
-
-                                <hr class="my-4">
-
-                                <div class="text-start">
-                                    <h6 class="mb-2">If you cannot copy the link, please use this code:</h6>
-                                    <div class="p-3 bg-white border rounded">
-                                        <code class="fs-5" id="user-code-display" style="color: #000;">---------</code>
-                                    </div>
-                                </div>
-                            </div>
+                            <p class="mb-2">You will be redirected to CloudResearch in <strong id="countdown">5</strong> seconds.</p>
+                            <p class="mb-0">If you are not redirected, <a href="#" id="redirect-link">click here</a>.</p>
                         </div>
 
                         <!-- Local Mode CSV Export -->
                         <div id="local-mode-export" class="d-none">
                             <hr class="my-4">
                             <div class="alert alert-warning">
-                                <h5>🧪 Local Testing Mode</h5>
+                                <h5>Local Testing Mode</h5>
                                 <p class="mb-3">You are in local mode. Click below to download your data as CSV:</p>
                                 <button class="btn btn-primary btn-lg" id="export-csv-btn">
-                                    📥 Download Data as CSV
+                                    Download Data as CSV
                                 </button>
                             </div>
                         </div>
 
                         <p class="text-muted">
-                            Thank you for your valuable contribution to our research.<br>
-                            You may now close this window.
+                            Thank you for your valuable contribution to our research.
                         </p>
                     </div>
                 </div>
@@ -99,34 +70,25 @@
     <script src="js/sheets-api.js"></script>
     
     <script>
-        // Initialize page
         document.addEventListener('DOMContentLoaded', async function() {
-            // Get session data
             const session = getSession();
             
             if (!session || !session.userId) {
-                // If no session, redirect to home
                 window.location.href = 'index.html';
                 return;
             }
             
-            // Display user ID
-            const userId = session.userId;
-            document.getElementById('user-id-display').textContent = userId;
-            document.getElementById('user-code-display').textContent = userId;
+            // Placeholder CloudResearch redirect URL — replace with actual URL
+            const cloudResearchUrl = 'https://app.cloudresearch.com/Router/Complete';
+            document.getElementById('redirect-link').href = cloudResearchUrl;
             
-            // Update completion URL with user ID
-            const completionUrl = `https://example.com/complete/${userId}`;
-            document.getElementById('completion-url').value = completionUrl;
-            
-            // Check if in local mode
+            let isLocalMode = false;
             try {
                 const settings = await loadConfig('general/settings.json');
-                if (settings.localMode === true) {
-                    // Show local mode export button
+                isLocalMode = settings.localMode === true;
+                
+                if (isLocalMode) {
                     document.getElementById('local-mode-export').classList.remove('d-none');
-                    
-                    // Add event listener for CSV export
                     document.getElementById('export-csv-btn').addEventListener('click', function() {
                         exportToCSV();
                     });
@@ -135,45 +97,22 @@
                 console.error('Error loading settings:', error);
             }
             
-            // Copy to clipboard functionality
-            const copyBtn = document.getElementById('copy-btn');
-            const copyText = document.getElementById('copy-text');
-            const copySuccess = document.getElementById('copy-success');
-            
-            copyBtn.addEventListener('click', function() {
-                const urlInput = document.getElementById('completion-url');
-                
-                // Select and copy
-                urlInput.select();
-                urlInput.setSelectionRange(0, 99999); // For mobile devices
-                
-                try {
-                    navigator.clipboard.writeText(urlInput.value).then(function() {
-                        // Show success message
-                        copySuccess.classList.remove('d-none');
-                        copyText.textContent = 'Copied!';
-                        copyBtn.classList.remove('btn-primary');
-                        copyBtn.classList.add('btn-success');
-                        
-                        // Reset after 3 seconds
-                        setTimeout(function() {
-                            copySuccess.classList.add('d-none');
-                            copyText.textContent = 'Copy Link';
-                            copyBtn.classList.remove('btn-success');
-                            copyBtn.classList.add('btn-primary');
-                        }, 3000);
-                    }).catch(function() {
-                        // Fallback for older browsers
-                        document.execCommand('copy');
-                        copySuccess.classList.remove('d-none');
-                        copyText.textContent = 'Copied!';
-                    });
-                } catch (err) {
-                    console.error('Copy failed:', err);
-                }
-            });
+            // Auto-redirect countdown (skip in local mode)
+            if (!isLocalMode) {
+                let seconds = 5;
+                const countdownEl = document.getElementById('countdown');
+                const interval = setInterval(function() {
+                    seconds--;
+                    countdownEl.textContent = seconds;
+                    if (seconds <= 0) {
+                        clearInterval(interval);
+                        window.location.href = cloudResearchUrl;
+                    }
+                }, 1000);
+            } else {
+                document.querySelector('.alert-info').innerHTML = '<p class="mb-0">Local mode active. Use the button below to export your data.</p>';
+            }
         });
     </script>
 </body>
 </html>
-

@@ -19,26 +19,30 @@
             <div class="col-lg-8">
                 <!-- Progress Indicator -->
                 <div class="progress mb-4" style="height: 8px;">
-                    <div class="progress-bar" role="progressbar" style="width: 55%;" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar" role="progressbar" style="width: 80%;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
 
                 <!-- Manipulation Check Card -->
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
-                        <h1 class="card-title text-center mb-4">Post-Reading Questionnaire (1/4)</h1>
+                        <h1 class="card-title text-center mb-4">Post Experiment Questionnaire</h1>
                         <h3 class="text-center text-muted mb-4">Manipulation Check</h3>
                         
                         <div class="alert alert-info mb-4">
                             Please answer the following questions about your reading experience.
                         </div>
 
-                        <!-- Questions Form -->
                         <form id="manipulation-check-form">
-                            <div id="questions-container">
+                            <h5 class="mb-3">Perceived Disruption</h5>
+                            <div id="disruption-container">
                                 <p class="text-center text-muted">Loading questions...</p>
                             </div>
 
-                            <!-- Submit Button -->
+                            <div class="d-none mt-4" id="ai-usefulness-section">
+                                <h5 class="mb-3">Perceived AI Usefulness</h5>
+                                <div id="ai-usefulness-container"></div>
+                            </div>
+
                             <div class="text-center mt-4">
                                 <button type="submit" class="btn btn-primary btn-lg">
                                     Continue
@@ -59,72 +63,82 @@
     <script src="js/storage.js"></script>
     
     <script>
-        let loadedQuestions = [];
+        let loadedDisruption = [];
+        let loadedAIUsefulness = [];
+        let showAISection = false;
         
-        // Initialize page
         document.addEventListener('DOMContentLoaded', async function() {
-            // Check session
             const session = getSession();
             if (!session || !session.userId) {
                 alert('No active session found. Please start from the beginning.');
                 window.location.href = 'index.html';
                 return;
             }
+            
+            const scenario = session.scenario;
+            showAISection = (scenario === 2 || scenario === 4);
+            
             try {
-                loadedQuestions = await loadConfig('post-test/manipulation-check.json');
-                renderQuestions(loadedQuestions);
+                const mcData = await loadConfig('post-test/manipulation-check.json');
+                
+                if (mcData.perceivedDisruption) {
+                    loadedDisruption = mcData.perceivedDisruption;
+                    renderQuestions(loadedDisruption, 'disruption-container', 'pd');
+                }
+                
+                if (showAISection && mcData.perceivedAIUsefulness) {
+                    loadedAIUsefulness = mcData.perceivedAIUsefulness;
+                    renderQuestions(loadedAIUsefulness, 'ai-usefulness-container', 'ai');
+                    document.getElementById('ai-usefulness-section').classList.remove('d-none');
+                }
             } catch (error) {
                 console.error('Error loading questions:', error);
-                document.getElementById('questions-container').innerHTML = '<p class="text-danger">Error loading questions. Please refresh the page.</p>';
+                document.getElementById('disruption-container').innerHTML = '<p class="text-danger">Error loading questions. Please refresh the page.</p>';
             }
             
-            // Handle form submission
             document.getElementById('manipulation-check-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 submitForm();
             });
         });
         
-        function renderQuestions(questions) {
-            const container = document.getElementById('questions-container');
+        function renderQuestions(questions, containerId, prefix) {
+            const container = document.getElementById(containerId);
             container.innerHTML = '';
             
             questions.forEach((q, index) => {
                 const questionDiv = document.createElement('div');
                 questionDiv.className = 'mb-4 p-3 border rounded';
                 
-                let html = `
-                    <h5 class="mb-3">Question ${index + 1}</h5>
-                    <p class="fw-bold">${q.question}</p>
-                `;
+                let html = `<p class="fw-bold">${q.question}</p>`;
                 
-                if (q.type === 'multiple-choice') {
+                if (q.type === 'likert') {
+                    const scale = q.scale || 7;
+                    html += '<div class="likert-scale">';
+                    if (q.labels && q.labels.length === 2) {
+                        html += `<div class="d-flex justify-content-between mb-2"><small>${q.labels[0]}</small><small>${q.labels[1]}</small></div>`;
+                    }
+                    html += '<div class="d-flex justify-content-between align-items-center">';
+                    for (let i = 1; i <= scale; i++) {
+                        html += `
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="${prefix}_${q.id}" id="${prefix}_${q.id}_${i}" value="${i}" required>
+                                <label class="form-check-label" for="${prefix}_${q.id}_${i}">${i}</label>
+                            </div>
+                        `;
+                    }
+                    html += '</div></div>';
+                } else if (q.type === 'multiple-choice') {
                     q.options.forEach((option, optIndex) => {
                         html += `
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="q${q.id}" id="q${q.id}_${optIndex}" value="${optIndex}" required>
-                                <label class="form-check-label" for="q${q.id}_${optIndex}">
+                                <input class="form-check-input" type="radio" name="${prefix}_${q.id}" id="${prefix}_${q.id}_${optIndex}" value="${optIndex}" required>
+                                <label class="form-check-label" for="${prefix}_${q.id}_${optIndex}">
                                     ${option}
                                 </label>
                             </div>
                         `;
                     });
-                } else if (q.type === 'likert') {
-                    const scale = q.scale || 5;
-                    html += '<div class="likert-scale">';
-                    if (q.labels && q.labels.length === 2) {
-                        html += `<div class="d-flex justify-content-between mb-2"><small>${q.labels[0]}</small><small>${q.labels[1]}</small></div>`;
-                    }
-                    html += '<div class="d-flex justify-content-between">';
-                    for (let i = 1; i <= scale; i++) {
-                        html += `
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="q${q.id}" id="q${q.id}_${i}" value="${i}" required>
-                                <label class="form-check-label" for="q${q.id}_${i}">${i}</label>
-                            </div>
-                        `;
-                    }
-                    html += '</div></div>';
                 }
                 
                 questionDiv.innerHTML = html;
@@ -132,28 +146,33 @@
             });
         }
         
-        function submitForm() {
-            const form = document.getElementById('manipulation-check-form');
-            const formData = new FormData(form);
+        function collectAnswers(questions, prefix) {
+            const formData = new FormData(document.getElementById('manipulation-check-form'));
             const answers = {};
-            
-            loadedQuestions.forEach(function(q) {
-                const val = formData.get('q' + q.id);
+            questions.forEach(function(q) {
+                const val = formData.get(prefix + '_' + q.id);
                 if (val === null) return;
-                const entry = { question: q.question };
                 if (q.type === 'multiple-choice') {
-                    entry.answer = q.options[parseInt(val)];
+                    answers[q.id] = q.options[parseInt(val)];
                 } else if (q.type === 'likert') {
-                    entry.answer = parseInt(val);
-                    if (q.labels) entry.scale = q.labels[0] + ' - ' + q.labels[1];
+                    answers[q.id] = parseInt(val);
                 }
-                answers[q.id] = entry;
             });
+            return answers;
+        }
+        
+        function submitForm() {
+            const manipCheckAnswers = {
+                perceivedDisruption: collectAnswers(loadedDisruption, 'pd')
+            };
             
-            updateSession({ manipulationCheckAnswers: answers });
-            window.location.href = 'self-report.html';
+            if (showAISection && loadedAIUsefulness.length > 0) {
+                manipCheckAnswers.perceivedAIUsefulness = collectAnswers(loadedAIUsefulness, 'ai');
+            }
+            
+            updateSession({ manipulationCheckAnswers: manipCheckAnswers });
+            window.location.href = 'post-experiment.html';
         }
     </script>
 </body>
 </html>
-

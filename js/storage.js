@@ -13,9 +13,6 @@ function initSession(userId, scenario) {
         userId: userId,
         scenario: scenario,
         consentTime: new Date().toISOString(),
-        miniTestAnswers: {},
-        miniTestStartTime: null,
-        miniTestEndTime: null,
         readingStartTime: null,
         readingEndTime: null,
         readingDuration: 0,
@@ -23,6 +20,7 @@ function initSession(userId, scenario) {
         manipulationCheckAnswers: {},
         selfReportAnswers: {},
         readingComprehensionAnswers: {},
+        readingComprehensionScore: 0,
         postExperimentAnswers: {}
     };
     
@@ -107,9 +105,6 @@ function exportSessionData() {
         userId: session.userId,
         scenario: session.scenario,
         consentTime: session.consentTime,
-        miniTestAnswers: JSON.stringify(session.miniTestAnswers),
-        miniTestStartTime: session.miniTestStartTime,
-        miniTestEndTime: session.miniTestEndTime,
         readingStartTime: session.readingStartTime,
         readingEndTime: session.readingEndTime,
         readingDuration: session.readingDuration,
@@ -118,6 +113,7 @@ function exportSessionData() {
         manipulationCheckAnswers: JSON.stringify(session.manipulationCheckAnswers),
         selfReportAnswers: JSON.stringify(session.selfReportAnswers),
         readingComprehensionAnswers: JSON.stringify(session.readingComprehensionAnswers),
+        readingComprehensionScore: session.readingComprehensionScore || 0,
         postExperimentAnswers: JSON.stringify(session.postExperimentAnswers),
         submitTime: new Date().toISOString()
     };

@@ -25,11 +25,7 @@
                 <!-- Scenario Instructions Card -->
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
-                        <h1 class="card-title text-center mb-4" id="scenario-title">Reading Instructions</h1>
-                        
-                        <div class="alert alert-primary mb-4">
-                            <strong>Your Scenario:</strong> <span id="scenario-number">-</span>
-                        </div>
+                        <h1 class="card-title text-center mb-4" id="scenario-title">Experiment Instruction</h1>
 
                         <!-- Scenario content will be loaded here -->
                         <div id="scenario-content" class="scenario-text mb-4">
@@ -39,7 +35,7 @@
                         <!-- Continue Button -->
                         <div class="text-center">
                             <button id="start-reading-btn" class="btn btn-success btn-lg">
-                                Start Reading
+                                Start
                             </button>
                         </div>
                     </div>
@@ -68,9 +64,6 @@
                 window.location.href = 'index.html';
                 return;
             }
-            
-            // Display scenario number
-            document.getElementById('scenario-number').textContent = `Scenario ${session.scenario}`;
             
             // Load scenario instructions from markdown file
             try {

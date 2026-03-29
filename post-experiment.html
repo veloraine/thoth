@@ -19,30 +19,24 @@
             <div class="col-lg-8">
                 <!-- Progress Indicator -->
                 <div class="progress mb-4" style="height: 8px;">
-                    <div class="progress-bar" role="progressbar" style="width: 88%;" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar" role="progressbar" style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
 
                 <!-- Post-Experiment Card -->
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
-                        <h1 class="card-title text-center mb-4">Post-Experiment Questionnaire (4/4)</h1>
+                        <h1 class="card-title text-center mb-4">Post Experiment Questionnaire</h1>
                         <h3 class="text-center text-muted mb-4">Demographics</h3>
                         
                         <div class="alert alert-info mb-4">
                             Finally, please answer some questions about your background.
                         </div>
 
-                        <!-- Questions Form -->
                         <form id="post-experiment-form">
-                            <!-- Demographics Section -->
-                            <div class="mb-5">
-                                <h4 class="border-bottom pb-2 mb-3">Demographics</h4>
-                                <div id="demographics-container">
-                                    <p class="text-center text-muted">Loading questions...</p>
-                                </div>
+                            <div id="demographics-container">
+                                <p class="text-center text-muted">Loading questions...</p>
                             </div>
 
-                            <!-- Submit Button -->
                             <div class="text-center mt-4">
                                 <button type="submit" class="btn btn-success btn-lg" id="submit-btn">
                                     <span class="spinner-border spinner-border-sm d-none" id="spinner"></span>
@@ -51,13 +45,11 @@
                             </div>
                         </form>
 
-                        <!-- Success Message -->
                         <div class="alert alert-success mt-4 d-none" id="success-message">
                             <h4 class="alert-heading">Thank you!</h4>
-                            <p>Your responses have been successfully submitted. You may now close this window.</p>
+                            <p>Your responses have been successfully submitted.</p>
                         </div>
 
-                        <!-- Error Message -->
                         <div class="alert alert-danger mt-4 d-none" id="error-message">
                             <h4 class="alert-heading">Submission Error</h4>
                             <p id="error-text"></p>
@@ -79,20 +71,18 @@
     <script>
         let loadedDemographics = [];
         
-        // Initialize page
         document.addEventListener('DOMContentLoaded', async function() {
-            // Check session
             const session = getSession();
             if (!session || !session.userId) {
                 alert('No active session found. Please start from the beginning.');
                 window.location.href = 'index.html';
                 return;
             }
+            
             try {
-                const questions = await loadConfig('post-test/post-experiment.json');
-                
-                if (questions.demographics) {
-                    loadedDemographics = questions.demographics;
+                const postExp = await loadConfig('post-test/post-experiment.json');
+                if (postExp.demographics) {
+                    loadedDemographics = postExp.demographics;
                     renderQuestions(loadedDemographics, 'demographics-container', 'demo');
                 }
             } catch (error) {
@@ -100,7 +90,6 @@
                 document.getElementById('demographics-container').innerHTML = '<p class="text-danger">Error loading questions. Please refresh the page.</p>';
             }
             
-            // Handle form submission
             document.getElementById('post-experiment-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 await submitAllData();
@@ -129,7 +118,7 @@
                         `;
                     });
                 } else if (q.type === 'likert') {
-                    const scale = q.scale || 5;
+                    const scale = q.scale || 7;
                     html += '<div class="likert-scale">';
                     if (q.labels && q.labels.length === 2) {
                         html += `<div class="d-flex justify-content-between mb-2"><small>${q.labels[0]}</small><small>${q.labels[1]}</small></div>`;
@@ -159,56 +148,38 @@
             const submitBtn = document.getElementById('submit-btn');
             const spinner = document.getElementById('spinner');
             
-            // Disable button and show spinner
             submitBtn.disabled = true;
             spinner.classList.remove('d-none');
             
-            // Collect form data with answer text
-            const form = document.getElementById('post-experiment-form');
-            const formData = new FormData(form);
-            const postExpAnswers = {};
-            
+            const formData = new FormData(document.getElementById('post-experiment-form'));
+            const demoAnswers = {};
             loadedDemographics.forEach(function(q) {
                 const val = formData.get('demo_' + q.id);
                 if (val === null) return;
-                const entry = { question: q.question };
                 if (q.type === 'multiple-choice') {
-                    entry.answer = q.options[parseInt(val)];
+                    demoAnswers[q.id] = q.options[parseInt(val)];
                 } else if (q.type === 'likert') {
-                    entry.answer = parseInt(val);
-                    if (q.labels) entry.scale = q.labels[0] + ' - ' + q.labels[1];
+                    demoAnswers[q.id] = parseInt(val);
                 } else {
-                    entry.answer = val;
+                    demoAnswers[q.id] = val;
                 }
-                postExpAnswers[q.id] = entry;
             });
             
-            updateSession({ postExperimentAnswers: postExpAnswers });
+            updateSession({ postExperimentAnswers: demoAnswers });
             
-            // Get complete session data
             const session = getSession();
             
             try {
-                // Submit to Google Sheets (or local mode)
                 const result = await submitToGoogleSheets(session);
-                
                 if (result && result.localMode) {
                     console.log('Local mode: Data stored for CSV export');
                 }
-                
-                // Redirect to thank you page
-                // Note: Session will be available on thank you page for displaying user ID
                 window.location.href = 'thank-you.html';
-                
             } catch (error) {
                 console.error('Submission error:', error);
-                
-                // In local mode, this shouldn't happen, but if it does, still proceed
-                console.log('Error caught, but proceeding to thank you page (local mode fallback)');
                 window.location.href = 'thank-you.html';
             }
         }
     </script>
 </body>
 </html>
-

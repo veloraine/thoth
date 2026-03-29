@@ -1,59 +1,43 @@
-# Scenario 2: AI Reading Assistant
+# Experiment Instruction
 
-## What to Expect
+**Welcome!**
+Thank you for participating in this experiment.
 
-During your reading session, you'll have access to an **AI Reading Assistant** that can help you understand the content.
-
-### How It Works
-
-- You'll see a **3-dot button (•••)** on the right side of your screen
-- **Click it anytime** you want AI help
-- A **sidebar will open** with:
-  - AI questions about the article (with 3 answer options each)
-  - Quick actions at the bottom (like "Summarize article", "Explain experiment", etc.)
-- Select an option and get a **detailed explanation**
-- The sidebar stays available throughout your reading
-
-### Example Interaction
-
-```
-See "•••" button on right
-↓
-Click it → Sidebar opens
-↓
-Choose: "What is the main focus of this research study?"
-↓
-See 3 options → Select one
-↓
-Get detailed explanation
-↓
-Continue reading or ask another question
-```
-
-### Quick Actions Available
-
-At the bottom of the sidebar, you'll find helpful quick actions:
-- 📝 Summarize this article
-- 🔬 Explain the experiment
-- 📊 Key findings
-- 💡 Practical implications
-
-## Your Task
-
-- **Read the article naturally** at your own pace
-- **Use the AI assistant** (•••button) whenever you want help
-- **Explore the questions and quick actions** available
-- **Think about how the AI helps** your understanding
-- Try to **understand and remember** the content
-
-## Important Notes
-
-- The AI Assistant is **optional** - use it when you want
-- You can open and close the sidebar anytime
-- The sidebar doesn't interrupt your reading
-- Use it as much or as little as you like
-- There is no time limit for reading
+This experiment examines how AI-assisted reading affects students' reading comprehension under media multitasking conditions. Your participation is voluntary, and all data collected will remain confidential and used solely for academic research purposes.
 
 ---
 
-When you're ready to begin reading with AI assistance available, click the button below.
+**Part 1: Main experiment**
+- You will read the provided article within 6 minutes.
+- You are **required** to use the AI assistance during the reading task. You may freely choose which features to use and may use any or all of them.
+- Please focus and complete the reading task carefully.
+
+<div style="display: flex; gap: 24px; margin: 24px 0; align-items: flex-start;">
+<div style="flex: 1; border: 2px solid #dc3545; border-radius: 8px; padding: 12px; background: #fff;">
+<img src="images/ask.png" alt="Click the question option to get explanation about the text" style="width: 100%; border-radius: 4px;">
+<p style="margin: 8px 0 0 0; font-size: 13px;"><strong>Click the question option</strong> to get explanation about the text</p>
+</div>
+<div style="flex: 1; border: 2px solid #dc3545; border-radius: 8px; padding: 12px; background: #fff;">
+<img src="images/summarize.png" alt="Click summarize to get the text summary" style="width: 100%; border-radius: 4px;">
+<p style="margin: 8px 0 0 0; font-size: 13px;"><strong>Click 'summarize'</strong> to get the text summary</p>
+</div>
+</div>
+
+**Part 2: Post reading task survey**
+After the reading task, you will complete:
+- Short metacomprehension questions.
+- A perceived cognitive load questionnaire.
+
+**Part 3: Reading comprehension test**
+- You will complete a reading comprehension test within 4 minutes.
+
+**Part 4: Post experiment questionnaire**
+- You will complete a short post experiment question and demographic.
+
+**Compensation**
+- You will receive compensation upon completing the entire experiment.
+- The total session will take approximately 16 minutes.
+
+<p style="color: #dc3545; font-weight: bold; font-style: italic;">If you quit midway and later resume, the timer will continue from where you left off.</p>
+
+Click **"Start"** to begin the reading task. Please note that ***you cannot return to this page***, so read the instructions carefully before proceeding.

@@ -44,20 +44,22 @@ async function submitToGoogleSheets(sessionData) {
  * Submit data to Supabase via PostgREST API
  */
 async function submitToSupabase(data, settings) {
+    const parseJSON = (str) => { try { return JSON.parse(str); } catch { return str; } };
+    
     const row = {
         user_id: data.userId,
         scenario: data.scenario,
         consent_time: data.consentTime,
-        mini_test_answers: data.miniTestAnswers,
         reading_start_time: data.readingStartTime,
         reading_end_time: data.readingEndTime,
         reading_duration: data.readingDuration,
         interaction_count: data.interactionCount,
-        interactions: data.interactions,
-        manipulation_check_answers: data.manipulationCheckAnswers,
-        self_report_answers: data.selfReportAnswers,
-        reading_comprehension_answers: data.readingComprehensionAnswers,
-        post_experiment_answers: data.postExperimentAnswers,
+        interactions: parseJSON(data.interactions),
+        manipulation_check_answers: parseJSON(data.manipulationCheckAnswers),
+        self_report_answers: parseJSON(data.selfReportAnswers),
+        reading_comprehension_answers: parseJSON(data.readingComprehensionAnswers),
+        reading_comprehension_score: data.readingComprehensionScore,
+        post_experiment_answers: parseJSON(data.postExperimentAnswers),
         submit_time: data.submitTime
     };
     
@@ -98,7 +100,6 @@ function exportToCSV() {
         'User ID',
         'Scenario',
         'Consent Time',
-        'Mini Test Answers',
         'Reading Start',
         'Reading End',
         'Reading Duration',
@@ -107,6 +108,7 @@ function exportToCSV() {
         'Manipulation Check',
         'Self Report',
         'Reading Comprehension',
+        'Reading Comprehension Score',
         'Post Experiment',
         'Submit Time'
     ];
@@ -115,7 +117,6 @@ function exportToCSV() {
         data.userId,
         data.scenario,
         data.consentTime,
-        data.miniTestAnswers,
         data.readingStartTime,
         data.readingEndTime,
         data.readingDuration,
@@ -124,6 +125,7 @@ function exportToCSV() {
         data.manipulationCheckAnswers,
         data.selfReportAnswers,
         data.readingComprehensionAnswers,
+        data.readingComprehensionScore,
         data.postExperimentAnswers,
         data.submitTime
     ];

@@ -1,37 +1,34 @@
-[
-  {
-    "id": "mc1",
-    "question": "Did you receive AI assistance (explanations, help) during reading?",
-    "type": "multiple-choice",
-    "options": [
-      "Yes",
-      "No",
-      "I'm not sure"
-    ]
-  },
-  {
-    "id": "mc2",
-    "question": "Did you receive pop-up quizzes during reading?",
-    "type": "multiple-choice",
-    "options": [
-      "Yes",
-      "No",
-      "I'm not sure"
-    ]
-  },
-  {
-    "id": "mc3",
-    "question": "If you received AI assistance, how helpful was it for understanding the article?",
-    "type": "likert",
-    "scale": 5,
-    "labels": ["Not at all helpful", "Extremely helpful"]
-  },
-  {
-    "id": "mc4",
-    "question": "If you received pop-up quizzes, how distracting were they?",
-    "type": "likert",
-    "scale": 5,
-    "labels": ["Not at all distracting", "Extremely distracting"]
-  }
-]
-
+{
+  "perceivedDisruption": [
+    {
+      "id": "pd1",
+      "question": "During the reading task, do you feel your attention was split between reading the text and replying to messages?",
+      "type": "likert",
+      "scale": 7,
+      "labels": ["Not at all", "Very much"]
+    },
+    {
+      "id": "pd2",
+      "question": "If you received messages during the reading task, to what extent did replying to them distract you from the reading task?",
+      "type": "likert",
+      "scale": 7,
+      "labels": ["Not at all", "Very much"]
+    }
+  ],
+  "perceivedAIUsefulness": [
+    {
+      "id": "ai1",
+      "question": "The AI assistant was useful in helping me identify and integrate important information.",
+      "type": "likert",
+      "scale": 7,
+      "labels": ["Strongly Disagree", "Strongly Agree"]
+    },
+    {
+      "id": "ai2",
+      "question": "Did you feel the AI reading assistant helped you read the passage more efficiently (e.g., saving time or effort)?",
+      "type": "likert",
+      "scale": 7,
+      "labels": ["Strongly Disagree", "Strongly Agree"]
+    }
+  ]
+}

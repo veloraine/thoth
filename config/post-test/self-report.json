@@ -1,49 +1,66 @@
-[
-  {
-    "id": "sr1",
-    "question": "How focused were you while reading the article?",
-    "type": "likert",
-    "scale": 7,
-    "labels": ["Not focused at all", "Extremely focused"]
-  },
-  {
-    "id": "sr2",
-    "question": "How difficult did you find the article to understand?",
-    "type": "likert",
-    "scale": 7,
-    "labels": ["Very easy", "Very difficult"]
-  },
-  {
-    "id": "sr3",
-    "question": "How much effort did you put into reading and understanding the article?",
-    "type": "likert",
-    "scale": 7,
-    "labels": ["No effort at all", "Maximum effort"]
-  },
-  {
-    "id": "sr4",
-    "question": "How confident are you that you understood the main ideas of the article?",
-    "type": "likert",
-    "scale": 7,
-    "labels": ["Not confident at all", "Very confident"]
-  },
-  {
-    "id": "sr5",
-    "question": "How interested were you in the topic of the article?",
-    "type": "likert",
-    "scale": 7,
-    "labels": ["Not interested at all", "Very interested"]
-  },
-  {
-    "id": "sr6",
-    "question": "Did you experience any technical difficulties during the study?",
-    "type": "multiple-choice",
-    "options": [
-      "No difficulties",
-      "Minor difficulties (did not significantly affect completion)",
-      "Moderate difficulties (somewhat affected completion)",
-      "Major difficulties (significantly affected completion)"
+{
+  "metacomprehension": {
+    "description": "<strong>In this section, please evaluate your experience during the reading task.</strong>\n\n<strong>First, please evaluate how well you understood the text you just read. Choose a number between 0 to 100 that best reflects your level of understanding.</strong>\n\n<strong>Second, you will rate how mentally demanding the task was using a 7-point Likert scale (1 = Not at all, 7 = Very much).</strong>",
+    "questions": [
+      {
+        "id": "meta1",
+        "question": "How well did you understand the text you just read?\nPlease choose a number between 0 to 100 that best reflect your understanding of the text.",
+        "type": "scale",
+        "min": 0,
+        "max": 100,
+        "step": 5
+      }
     ]
-  }
-]
-
+  },
+  "cognitiveLoad": [
+    {
+      "id": "cl1",
+      "question": "For this reading activity, many things needed to be kept in mind simultaneously.",
+      "type": "likert",
+      "scale": 7,
+      "labels": ["Not at all", "Very much"]
+    },
+    {
+      "id": "cl2",
+      "question": "The reading activity was very complex.",
+      "type": "likert",
+      "scale": 7,
+      "labels": ["Not at all", "Very much"]
+    },
+    {
+      "id": "cl3",
+      "question": "During this reading activity, it was exhausting to find the important information.",
+      "type": "likert",
+      "scale": 7,
+      "labels": ["Not at all", "Very much"]
+    },
+    {
+      "id": "cl4",
+      "question": "The design of the reading task was very inconvenient for learning.",
+      "type": "likert",
+      "scale": 7,
+      "labels": ["Not at all", "Very much"]
+    },
+    {
+      "id": "cl5",
+      "question": "During this reading activity, it was difficult to recognize and link the crucial information.",
+      "type": "likert",
+      "scale": 7,
+      "labels": ["Not at all", "Very much"]
+    }
+  ],
+  "attentionCheck": [
+    {
+      "id": "ac1",
+      "question": "In the case study, what is the name of the company that Aliyah Jones works for?",
+      "type": "multiple-choice",
+      "options": [
+        "Global Beauty & Cleaning Corp (GBCC)",
+        "Backer-Birnbaum International (BBI)",
+        "Jones-Ashworth Marketing Group (JAMG)",
+        "FreshFace (FF)"
+      ],
+      "correctAnswer": 1
+    }
+  ]
+}

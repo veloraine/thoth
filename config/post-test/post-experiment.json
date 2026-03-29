@@ -1,55 +1,89 @@
 {
   "demographics": [
     {
-      "id": "age",
-      "question": "What is your age?",
-      "type": "number"
-    },
-    {
       "id": "gender",
-      "question": "What is your gender?",
+      "question": "Gender:",
       "type": "multiple-choice",
       "options": [
         "Male",
-        "Female",
-        "Non-binary",
-        "Prefer not to say",
-        "Other"
+        "Female"
       ]
     },
     {
-      "id": "year",
-      "question": "What year are you in university?",
+      "id": "age",
+      "question": "Age:",
       "type": "multiple-choice",
       "options": [
-        "First year (Freshman)",
-        "Second year (Sophomore)",
-        "Third year (Junior)",
-        "Fourth year (Senior)",
-        "Graduate student",
-        "Other"
+        "18-22",
+        "23-27",
+        "28-32",
+        "33-37",
+        "> 37"
       ]
     },
     {
-      "id": "major",
-      "question": "What is your field of study/major?",
-      "type": "text"
-    },
-    {
-      "id": "english",
-      "question": "Is English your first language?",
+      "id": "education",
+      "question": "Educational Level:",
       "type": "multiple-choice",
       "options": [
-        "Yes",
-        "No"
+        "Undergraduate Student",
+        "Master Student",
+        "Doctoral Student"
       ]
     },
     {
-      "id": "reading",
-      "question": "How would you rate your reading comprehension skills?",
-      "type": "likert",
-      "scale": 5,
-      "labels": ["Poor", "Excellent"]
+      "id": "field",
+      "question": "Field of Study:",
+      "type": "multiple-choice",
+      "options": [
+        "Business / Management",
+        "Finance / Accounting / Economics",
+        "Social Sciences (Political science, sociology, etc)",
+        "Natural sciences (Chemistry, Physics, etc)",
+        "Healthcare / Pharmacy",
+        "Information Technology / Computer Science",
+        "Arts / Humanities"
+      ]
+    },
+    {
+      "id": "multitasking",
+      "question": "Experience with media multitasking (e.g. reading while listening to music, studying while watching youtube etc)",
+      "type": "multiple-choice",
+      "options": [
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Always"
+      ]
+    },
+    {
+      "id": "aiExperience",
+      "question": "Please indicate your prior experience with AI tools used for academic purposes or learning assistance: ChatGPT, ChatPDF, NotebookLM, Google AI Studio, CoPilot, OpenAI playground, Socratic, Claude, Gemini, etc",
+      "type": "multiple-choice",
+      "options": [
+        "Unfamiliar",
+        "Familiar but never use it",
+        "Familiar but rarely use it",
+        "Very familiar and regularly use it"
+      ]
+    },
+    {
+      "id": "priorReading",
+      "question": "Have you read the same article as the case you read during the reading task before?",
+      "type": "multiple-choice",
+      "options": [
+        "Yes, I have",
+        "No, I haven't"
+      ]
+    },
+    {
+      "id": "topicFamiliarity",
+      "question": "Are you familiar with the topic of using algorithms to support decision making in organization?",
+      "type": "multiple-choice",
+      "options": [
+        "Yes I'm Familiar",
+        "No, I'm not familiar"
+      ]
     }
   ]
 }
