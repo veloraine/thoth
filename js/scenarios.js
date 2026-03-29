@@ -4,12 +4,15 @@
  */
 
 let aiInterval = null;
-let quizInterval = null;
+let quizTimeouts = [];
+let quizDismissTimeout = null;
 let aiQuestions = [];
 let quizQuestions = [];
 let aiQuestionIndex = 0;
 let quizQuestionIndex = 0;
-let usedQuizIndices = [];
+let currentQuizAnswered = false;
+let currentQuizStartTime = null;
+let currentQuizData = null;
 let settings = {};
 
 /**
@@ -270,90 +273,125 @@ function showQuickAction(action, startTime) {
 }
 
 /**
- * Start pop-up quiz interruptions
+ * Start pop-up quiz interruptions at fixed times (1min, 3min, 5min)
  */
 function startQuizInterruptions() {
-    const interval = settings.popupQuizInterval * 1000; // Convert to milliseconds
+    const schedule = [60, 180, 300];
     
-    quizInterval = setInterval(function() {
-        // Only show up to configured number of quizzes
-        if (usedQuizIndices.length < settings.popupQuizCount) {
-            showRandomQuiz();
+    schedule.forEach(function(delaySec, index) {
+        if (index < quizQuestions.length) {
+            const t = setTimeout(function() {
+                showQuiz(index);
+            }, delaySec * 1000);
+            quizTimeouts.push(t);
         }
-    }, interval);
+    });
 }
 
 /**
- * Show random quiz question in the trivia panel
+ * Show quiz question by index in the trivia panel
  */
-function showRandomQuiz() {
-    let availableIndices = [];
-    for (let i = 0; i < quizQuestions.length; i++) {
-        if (!usedQuizIndices.includes(i)) {
-            availableIndices.push(i);
-        }
+function showQuiz(index) {
+    if (index >= quizQuestions.length) return;
+    
+    // If a previous question is still showing unanswered, record it as skipped
+    if (currentQuizData !== null && !currentQuizAnswered) {
+        addInteraction('trivia', {
+            question: currentQuizData.question,
+            selectedAnswer: '(unanswered)',
+            startTime: currentQuizStartTime,
+            endTime: new Date().toISOString()
+        });
     }
     
-    if (availableIndices.length === 0) {
-        return;
+    if (quizDismissTimeout) {
+        clearTimeout(quizDismissTimeout);
+        quizDismissTimeout = null;
     }
     
-    const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
-    usedQuizIndices.push(randomIndex);
-    
-    const questionData = quizQuestions[randomIndex];
-    const startTime = new Date().toISOString();
+    const questionData = quizQuestions[index];
+    currentQuizData = questionData;
+    currentQuizAnswered = false;
+    currentQuizStartTime = new Date().toISOString();
+    quizQuestionIndex = index;
     
     const triviaPanel = document.getElementById('trivia-panel');
+    const submitBtn = document.getElementById('trivia-submit-btn');
     
     document.getElementById('trivia-question').textContent = questionData.question;
+    submitBtn.disabled = false;
     
     const optionsContainer = document.getElementById('trivia-options');
     optionsContainer.innerHTML = '';
     
-    questionData.options.forEach((option, index) => {
+    questionData.options.forEach((option, optIdx) => {
         const div = document.createElement('div');
         div.className = 'form-check mb-2';
         div.innerHTML = `
-            <input class="form-check-input" type="radio" name="trivia-answer" id="trivia_${index}" value="${index}" required>
-            <label class="form-check-label" for="trivia_${index}">
+            <input class="form-check-input" type="radio" name="trivia-answer" id="trivia_${optIdx}" value="${optIdx}" required>
+            <label class="form-check-label" for="trivia_${optIdx}">
                 ${option}
             </label>
         `;
         optionsContainer.appendChild(div);
     });
     
-    // Show trivia panel (push layout)
     triviaPanel.classList.add('open');
     document.body.classList.add('trivia-panel-open');
     
-    document.getElementById('trivia-submit-btn').onclick = function() {
+    submitBtn.onclick = function() {
         const selectedOption = document.querySelector('input[name="trivia-answer"]:checked');
         if (!selectedOption) {
             alert('Please select an answer');
             return;
         }
         
+        currentQuizAnswered = true;
+        submitBtn.disabled = true;
+        
+        // Lock all radio buttons so the selection can't be changed
+        document.querySelectorAll('input[name="trivia-answer"]').forEach(function(r) {
+            r.disabled = true;
+        });
+        
         addInteraction('trivia', {
             question: questionData.question,
             selectedAnswer: questionData.options[parseInt(selectedOption.value)],
-            startTime: startTime,
+            startTime: currentQuizStartTime,
             endTime: new Date().toISOString()
         });
         
-        // Hide trivia panel
-        triviaPanel.classList.remove('open');
-        document.body.classList.remove('trivia-panel-open');
+        // Keep panel visible for 20s then dismiss
+        quizDismissTimeout = setTimeout(function() {
+            dismissQuizPanel();
+        }, 20000);
     };
+}
+
+/**
+ * Dismiss the quiz panel
+ */
+function dismissQuizPanel() {
+    const triviaPanel = document.getElementById('trivia-panel');
+    triviaPanel.classList.remove('open');
+    document.body.classList.remove('trivia-panel-open');
+    currentQuizData = null;
+    currentQuizStartTime = null;
+    if (quizDismissTimeout) {
+        clearTimeout(quizDismissTimeout);
+        quizDismissTimeout = null;
+    }
 }
 
 /**
  * Stop all scenario interruptions
  */
 function stopScenario() {
-    if (quizInterval) {
-        clearInterval(quizInterval);
-        quizInterval = null;
+    quizTimeouts.forEach(function(t) { clearTimeout(t); });
+    quizTimeouts = [];
+    if (quizDismissTimeout) {
+        clearTimeout(quizDismissTimeout);
+        quizDismissTimeout = null;
     }
     
     // Close AI sidebar if open
