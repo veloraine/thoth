@@ -223,7 +223,16 @@ function showQuickAction(action, startTime) {
                 <p>${action.label}</p>
             </div>
             <div class="ai-answer-display">
-                <img src="${action.image}" alt="Infographic" style="width:100%; border-radius:8px;">
+                <div class="infographic-container" style="position: relative; cursor: pointer;" onclick="document.getElementById('zoomModalImage').src='${action.image}'; new bootstrap.Modal(document.getElementById('imageZoomModal')).show();">
+                    <img src="${action.image}" alt="Infographic" style="width:100%; border-radius:8px;">
+                    <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); color: #fff; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 18px;" title="Click to zoom">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/>
+                            <path d="M10.344 11.742q.044-.04.085-.082l3.15 3.15a.5.5 0 0 0 .707-.708l-3.15-3.15a7 7 0 0 1-.792.79M6.5 10a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-5.854a.5.5 0 0 0-1 0V6H4.5a.5.5 0 0 0 0 1H5.9v1.854a.5.5 0 0 0 1 0V7H8.5a.5.5 0 0 0 0-1H6.854z"/>
+                        </svg>
+                    </div>
+                </div>
+                <p style="margin: 6px 0 0; font-size: 12px; color: #6c757d; text-align: center;">Click image to zoom</p>
             </div>
         `;
         

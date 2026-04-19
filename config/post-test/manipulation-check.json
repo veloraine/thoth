@@ -2,33 +2,46 @@
   "perceivedDisruption": [
     {
       "id": "pd1",
-      "question": "During the reading task, do you feel your attention was split between reading the text and replying to messages?",
+      "question": "During the reading task, I stopped reading to respond to messages that appeared on the screen",
       "type": "likert",
       "scale": 7,
-      "labels": ["Not at all", "Very much"]
+      "labels": ["Strongly Disagree", "Strongly Agree"]
     },
     {
       "id": "pd2",
-      "question": "If you received messages during the reading task, to what extent did replying to them distract you from the reading task?",
+      "question": "The messages that appeared on the screen during reading made it harder to focus on the article.",
       "type": "likert",
       "scale": 7,
-      "labels": ["Not at all", "Very much"]
+      "labels": ["Strongly Disagree", "Strongly Agree"]
     }
   ],
   "perceivedAIUsefulness": [
     {
       "id": "ai1",
-      "question": "The AI assistant was useful in helping me identify and integrate important information.",
+      "question": "The AI reading assistant guided me toward understanding the article rather than simply giving me the answers",
       "type": "likert",
       "scale": 7,
       "labels": ["Strongly Disagree", "Strongly Agree"]
     },
     {
       "id": "ai2",
-      "question": "Did you feel the AI reading assistant helped you read the passage more efficiently (e.g., saving time or effort)?",
+      "question": "Using the AI reading assistant during reading helped me better understand the key ideas in the article",
       "type": "likert",
       "scale": 7,
       "labels": ["Strongly Disagree", "Strongly Agree"]
+    }
+  ],
+  "filteringQuestions": [
+    {
+      "id": "fq1",
+      "question": "Which of the following features were available to you during the reading task?",
+      "type": "multiple-choice",
+      "options": [
+        "An reading assistant",
+        "An instant messaging / chat pop-up",
+        "An AI reading assistant and an Instant messaging / chat pop-up",
+        "None of the above"
+      ]
     }
   ]
 }

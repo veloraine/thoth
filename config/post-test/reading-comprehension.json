@@ -4,10 +4,10 @@
     "question": "Why did Christine Jenkins support Ed Yu's promotion?",
     "type": "multiple-choice",
     "options": [
-      "He was identified as a high flight risk by analytics",
+      "He was identified as a high flight risk with no current openings in his own division",
       "He had stronger interview performance than Molly",
       "He demonstrated superior leadership skills in meetings",
-      "He had more years of experience at BBI"
+      "He had more years of experience at BBI than Molly Ashworth"
     ],
     "correctAnswer": 0
   },
@@ -28,8 +28,8 @@
     "question": "What did Ed suggest during his interview with Aliyah?",
     "type": "multiple-choice",
     "options": [
-      "Reorganizing the marketing department structure",
-      "Replacing intuition with algorithmic decisions",
+      "Reorganizing the marketing department's reporting structure",
+      "Replacing human intuition with algorithmic decisions",
       "Launching a new global brand strategy",
       "Applying in-field customer research methods to cleaning products"
     ],
@@ -37,85 +37,85 @@
   },
   {
     "id": "rc4",
-    "question": "What distinction did the expert emphasize about people analytics?",
+    "question": "According to the article, how many promotion decisions had BBI's people-analytics algorithm been used to inform prior to Aliyah's case?",
     "type": "multiple-choice",
     "options": [
-      "It eliminates bias entirely",
-      "It should complement, not replace, human judgment",
-      "It should override managerial instincts",
-      "It is most useful for entry-level hiring"
+      "Five",
+      "Three",
+      "It had been used across all divisions",
+      "Ten"
     ],
     "correctAnswer": 1
   },
   {
     "id": "rc5",
-    "question": "What does the contrast between Molly's and Ed's networks suggest?",
+    "question": "What combination of factors most fully explains why Aliyah remains undecided after reviewing both the interview results and the algorithm's outputs?",
     "type": "multiple-choice",
     "options": [
-      "Ed had broader cross-divisional relationships than Molly",
-      "Molly lacked strong internal relationships",
-      "Network size directly predicts leadership success",
-      "Communication frequency determines promotion outcomes"
+      "The algorithm's unproven track record combined with her firsthand knowledge of Molly's capabilities",
+      "The algorithm's methodology was too complex for non-technical managers to evaluate",
+      "She was concerned that choosing Molly would damage her relationship with Christine",
+      "Upper management had already indicated a preference for Ed"
     ],
     "correctAnswer": 0
   },
   {
     "id": "rc6",
-    "question": "Why does the expert argue the algorithm should not replace human judgment?",
+    "question": "What does the contrast between Molly's and Ed's networks suggest?",
     "type": "multiple-choice",
     "options": [
-      "Algorithms often miscalculate employee potential",
-      "Algorithms are biased against certain demographic groups",
-      "Algorithms cannot define contextual success criteria for the role",
-      "Algorithms are too costly to implement widely"
+      "Molly lacked strong internal relationships",
+      "Network size directly predicts leadership success",
+      "Ed had broader cross-divisional relationships than Molly",
+      "Communication frequency determines promotion outcomes"
     ],
     "correctAnswer": 2
   },
   {
     "id": "rc7",
-    "question": "Why might Molly's narrower network be interpreted differently depending on Aliyah's goals?",
+    "question": "What does Aliyah's reaction after interviewing both candidates reveal about why she finds the decision difficult?",
     "type": "multiple-choice",
     "options": [
-      "Narrow networks always indicate lower leadership potential",
-      "Networks are more important than performance outcomes",
-      "Network breadth matters only if cross-division collaboration is prioritized",
-      "Networks determine employee retention rates"
+      "She worries that promoting Molly will be seen as favoritism due to their mentorship relationship",
+      "She disagrees with HR's decision to involve a data scientist in the process",
+      "Her direct observation of both candidates contradicts the algorithm's ranking, forcing her to weigh experiential evidence against quantitative data",
+      "Neither candidate performed well enough in their interview to justify a promotion decision"
     ],
     "correctAnswer": 2
   },
   {
     "id": "rc8",
-    "question": "What is the central tension highlighted by the case?",
+    "question": "Based on the expert's response, under what condition would the algorithm's recommendation be most justified as the basis for the final decision?",
     "type": "multiple-choice",
     "options": [
-      "Gender bias in promotion decisions",
-      "The appropriate balance between analytics and managerial judgment",
-      "Resistance to technological change in organizations",
-      "Competition between business divisions"
+      "When HR and the hiring manager reach a unanimous agreement",
+      "When the role's success criteria prioritize cross-divisional reach over immediate domain expertise",
+      "When the algorithm has been validated across a large number of previous promotion decisions",
+      "When both candidates have equivalent interview performance"
     ],
     "correctAnswer": 1
   },
   {
     "id": "rc9",
-    "question": "Why does Aliyah feel hesitant to rely solely on the algorithm recommendation?",
+    "question": "According to the expert's analysis, what would need to be true about the marketing director role for Ed's wider network to be the decisive factor in Aliyah's decision?",
     "type": "multiple-choice",
     "options": [
-      "She believed Molly had stronger social connections",
-      "She feared backlash from senior leadership",
-      "She questioned its validity and trusted her experiential judgment",
-      "She disliked the use of analytics in HR decisions"
+      "HR and Aliyah would need to reach a unanimous agreement on the hiring criteria",
+      "The algorithm's network analysis would need to be validated by a larger dataset",
+      "The role would need to prioritize building collaboration across divisions over immediately applying deep product knowledge",
+      "Ed would need to demonstrate stronger domain knowledge than he showed in the interview"
     ],
     "correctAnswer": 2
   },
   {
     "id": "rc10",
-    "question": "What is the strongest internal conflict that Aliyah experiences based on the article?",
+    "question": "What does Brad Bibson's candid admission about the algorithm most directly imply about the reliability of BBI's current people-analytics system?",
     "type": "multiple-choice",
     "options": [
-      "Deciding whether to challenge HR authority",
-      "Managing time pressure from upper management",
-      "Choosing between loyalty and organizational politics",
-      "Balancing data-driven recommendations with personal insight"
+      "People-analytics systems are generally unreliable for leadership hiring",
+      "The algorithm is likely to improve significantly once more data is collected",
+      "Brad believes Molly is the stronger candidate despite the algorithm's output",
+      "The system lacks sufficient outcome data to confirm whether its recommendations produce good hires"
     ],
     "correctAnswer": 3
   }

@@ -37,7 +37,8 @@
 
                         <div class="alert alert-info mb-4">
                             <p class="mb-2">You will be redirected to CloudResearch in <strong id="countdown">5</strong> seconds.</p>
-                            <p class="mb-0">If you are not redirected, <a href="#" id="redirect-link">click here</a>.</p>
+                            <p class="mb-2">If you are not redirected, <a href="#" id="redirect-link">click here</a>.</p>
+                            <p class="mb-0">If you are not directed to the completion link, use this code: <strong id="completion-code"></strong></p>
                         </div>
 
                         <!-- Local Mode CSV Export -->
@@ -78,14 +79,15 @@
                 return;
             }
             
-            // Placeholder CloudResearch redirect URL — replace with actual URL
-            const cloudResearchUrl = 'https://app.cloudresearch.com/Router/Complete';
-            document.getElementById('redirect-link').href = cloudResearchUrl;
+            let cloudResearchUrl = '';
+            let completionCode = '';
             
             let isLocalMode = false;
             try {
                 const settings = await loadConfig('general/settings.json');
                 isLocalMode = settings.localMode === true;
+                cloudResearchUrl = settings.completionUrl || '';
+                completionCode = settings.completionCode || '';
                 
                 if (isLocalMode) {
                     document.getElementById('local-mode-export').classList.remove('d-none');
@@ -96,6 +98,9 @@
             } catch (error) {
                 console.error('Error loading settings:', error);
             }
+            
+            document.getElementById('redirect-link').href = cloudResearchUrl;
+            document.getElementById('completion-code').textContent = completionCode;
             
             // Auto-redirect countdown (skip in local mode)
             if (!isLocalMode) {

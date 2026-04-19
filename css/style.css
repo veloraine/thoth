@@ -215,7 +215,7 @@ body {
     font-size: 1.125rem;
     line-height: 1.8;
     color: #1a1a1a;
-    text-align: left;
+    text-align: justify;
     max-width: 100%;
 }
 
@@ -696,7 +696,7 @@ body.trivia-panel-open {
 }
 
 .trivia-panel-header {
-    padding: 1rem 1.5rem;
+    padding: 0.6rem 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -708,17 +708,32 @@ body.trivia-panel-open {
 .trivia-panel-header h5 {
     margin: 0;
     font-weight: 600;
+    font-size: 0.95rem;
     color: #1a1a1a;
 }
 
 .trivia-panel-content {
     flex: 1;
     overflow-y: auto;
-    padding: 1.25rem 1.5rem;
+    padding: 0.75rem 1rem;
+}
+
+.trivia-panel-content .fw-bold {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.trivia-panel-content .form-check {
+    margin-bottom: 0.25rem !important;
 }
 
 .trivia-panel-content .form-check-label {
-    font-size: 0.95rem;
+    font-size: 0.82rem;
+}
+
+.trivia-panel-content .btn {
+    font-size: 0.85rem;
+    padding: 0.3rem 1rem;
 }
 
 /* AI sidebar shrinks to 60% when trivia is co-active (scenario 4) */

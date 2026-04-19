@@ -1,10 +1,12 @@
 {
   "localMode": false,
   "readingTimer": 360,
-  "comprehensionTimer": 240,
+  "comprehensionTimer": 300,
   "aiQuestionInterval": 30,
   "popupQuizInterval": 60,
   "popupQuizCount": 3,
   "supabaseUrl": "https://uhldtgwcixsrbyfjspga.supabase.co",
-  "supabaseAnonKey": "sb_publishable_VqSDrHKejOcpIfEtCyJCsA_8d2fX8Sj"
+  "supabaseAnonKey": "sb_publishable_VqSDrHKejOcpIfEtCyJCsA_8d2fX8Sj",
+  "completionUrl": "https://connect.cloudresearch.com/participant/project/66017DF07C/complete",
+  "completionCode": "66017DF07C"
 }
